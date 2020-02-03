@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Navbar } from "react-bootstrap";
-import { Nav } from "react-bootstrap";
+import { Navbar, Nav, Row, Col } from "react-bootstrap";
 import project from "./static";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -8,9 +7,17 @@ import {
   navbar_selection_key2,
   navbar_selection_key3
 } from "../../actions";
+import ContactBar from "./contactBar";
+import styled from "styled-components";
+import logo from "../../pictures/logo_icon.PNG";
+import MyGoogleFont from "./myGoogleFont";
 
 function Navigation() {
   const [activeNavLink, setActiveNavLink] = useState("");
+  const [nav_Items_style, setNav_Items_style] = useState({
+    color: project().projectColor,
+    fontWeight: "bold"
+  });
 
   // current value in the store //
   const key_selected = useSelector(state => state.navbar); // check in the /reducers/index.js
@@ -35,58 +42,113 @@ function Navigation() {
     }
   };
 
-  const getFontSize = key => {
-    if (key_selected === key) {
-      return 20;
-    } else {
-      return 15;
+  const HoverSpan = styled.span`
+    color: #1d8348;
+    font-weight: bold;
+    padding: 8px;
+    :hover {
+      color: white;
+      cursor: pointer;
+      background-color: #1d8348;
+      font-weight: bold;
+      border-radius: 4px 4px;
+      padding: 8px;
     }
+  `; // styled-components library helps us to style html elements
+
+  const logo_style = {
+    backgroundImage: `url(${logo})`,
+    backgroundPosition: "center",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    height: 70,
+    width: 70,
+    marginRight: 10
   };
 
   return (
-    <Navbar
-      collapseOnSelect
-      expand="lg"
-      variant="dark"
-      style={{ backgroundColor: project().projectColor }}
-    >
-      <Navbar.Brand href="#home" style={{ color: "white" }}>
-        {project().companyName}{" "}
-      </Navbar.Brand>
-      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-      <Navbar.Collapse
-        id="responsive-navbar-nav"
-        className="justify-content-end"
+    <div>
+      <ContactBar />
+      <Navbar
+        collapseOnSelect
+        expand="lg"
+        variant="dark"
+        style={{ backgroundColor: "white" }}
       >
-        {/* //or just put this empty nav and give it a margin right "push the next element (Nav) up to the end" <Nav className="mr-auto"></Nav> */}
-        <Nav onSelect={handleSelection} activeKey={activeNavLink}>
-          <Nav.Link href="/" eventKey="key1" style={{ color: "white" }}>
-            Home
-          </Nav.Link>
-          <Nav.Link
-            href="/services"
-            eventKey="key2"
+        <Navbar.Brand style={logo_style}></Navbar.Brand>
+        {/* 
+        // this also works well // but <Row> component is more professional
+        <span>
+          <span
             style={{
-              color: "white"
-              // fontSize: getFontSize("key2")
+              color: "black",
+              fontWeight: "bold",
+              fontSize: 20
             }}
           >
-            Services
-          </Nav.Link>
-          <Nav.Link
-            href="/about"
-            eventKey="key3"
-            style={{
-              color: "white"
-              // fontSize: getFontSize("key3")
-            }}
-          >
-            About us
-          </Nav.Link>
-          <Nav.Link href="#"></Nav.Link>
-        </Nav>
-      </Navbar.Collapse>
-    </Navbar>
+            <MyGoogleFont text={project().companyName} />
+          </span>
+          <span>
+            <i>Think energy Think smart</i>
+          </span>
+        </span> */}
+        <div>
+          <Row>
+            <Col
+              style={{
+                color: "black",
+                fontWeight: "bold",
+                fontSize: 20,
+                textShadow: "4px 4px 4px #aaa"
+              }}
+            >
+              <MyGoogleFont
+                text={project().companyName}
+                fontfamily="tangerine"
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col
+              style={{
+                fontSize: 13,
+                textShadow: "4px 4px 4px #aaa"
+              }}
+            >
+              <i>
+                <MyGoogleFont
+                  text={"Think energy Think smart"}
+                  fontfamily="pacifico"
+                />
+              </i>
+            </Col>
+          </Row>
+        </div>
+        <Navbar.Toggle
+          aria-controls="responsive-navbar-nav"
+          style={{ backgroundColor: project().projectColor }}
+        />
+        <Navbar.Collapse
+          id="responsive-navbar-nav"
+          className="justify-content-end"
+        >
+          <Nav onSelect={handleSelection} activeKey={activeNavLink}>
+            <Nav.Link href="/" eventKey="key1">
+              <HoverSpan>Home</HoverSpan>
+            </Nav.Link>
+            <Nav.Link href="/services" eventKey="key2">
+              <HoverSpan>Products & Services</HoverSpan>
+            </Nav.Link>
+            <Nav.Link href="/about" eventKey="key3">
+              <HoverSpan>About</HoverSpan>
+            </Nav.Link>
+            <Nav.Link href="/login" eventKey="key4">
+              <HoverSpan>Login</HoverSpan>
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+    </div>
   );
 }
 
