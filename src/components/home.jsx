@@ -1,12 +1,17 @@
 import React, { Component } from "react";
 import project from "./subcomponents/static";
+import Slider from "./subcomponents/slider";
 
 class Home extends Component {
-  state = {};
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
   render() {
     return (
-      <div style={{ height: 500 }}>
-        Welcome to {project().companyName} Energy !
+      <div style={{ minHeight: 1100 }}>
+        <Slider />
       </div>
     );
   }
