@@ -10,7 +10,8 @@ import {
 import ContactBar from "./contactBar";
 import styled from "styled-components";
 import logo from "../../pictures/logo_icon.PNG";
-import MyGoogleFont from "./myGoogleFont";
+import GoogleFont from "./fonts/googleFont";
+import GoogleFontNavItem from "./fonts/googleFontForNavItems";
 
 function Navigation() {
   const [activeNavLink, setActiveNavLink] = useState("");
@@ -102,10 +103,7 @@ function Navigation() {
                 textShadow: "4px 4px 4px #aaa"
               }}
             >
-              <MyGoogleFont
-                text={project().companyName}
-                fontfamily="tangerine"
-              />
+              <GoogleFont text={project().companyName} fontfamily="tangerine" />
             </Col>
           </Row>
           <Row>
@@ -116,7 +114,7 @@ function Navigation() {
               }}
             >
               <i>
-                <MyGoogleFont
+                <GoogleFont
                   text={"Think energy Think smart"}
                   fontfamily="pacifico"
                 />
@@ -134,16 +132,36 @@ function Navigation() {
         >
           <Nav onSelect={handleSelection} activeKey={activeNavLink}>
             <Nav.Link href="/" eventKey="key1">
-              <HoverSpan>Home</HoverSpan>
+              <HoverSpan>
+                <GoogleFontNavItem
+                  text={"Home"}
+                  fontfamily={project().nav_item_font}
+                />
+              </HoverSpan>
             </Nav.Link>
             <Nav.Link href="/services" eventKey="key2">
-              <HoverSpan>Products & Services</HoverSpan>
+              <HoverSpan>
+                <GoogleFontNavItem
+                  text={"Products & Services"}
+                  fontfamily={project().nav_item_font}
+                />
+              </HoverSpan>
             </Nav.Link>
             <Nav.Link href="/about" eventKey="key3">
-              <HoverSpan>About</HoverSpan>
+              <HoverSpan>
+                <GoogleFontNavItem
+                  text={"About"}
+                  fontfamily={project().nav_item_font}
+                />
+              </HoverSpan>
             </Nav.Link>
             <Nav.Link href="/login" eventKey="key4">
-              <HoverSpan>Login</HoverSpan>
+              <HoverSpan>
+                <GoogleFontNavItem
+                  text={"Login"}
+                  fontfamily={project().nav_item_font}
+                />
+              </HoverSpan>
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>

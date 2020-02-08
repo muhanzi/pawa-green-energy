@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import GoogleFontLoader from "react-google-font-loader";
-import styles from "./font_styles.css";
 
-class MyGoogleFont extends Component {
+class GoogleFontNavItem extends Component {
   state = {
     roboto: "Roboto Mono, monospaced",
     roboto_sans_serif: "Roboto, sans-serif",
@@ -12,7 +11,8 @@ class MyGoogleFont extends Component {
     lobster: "'Lobster', cursive",
     sacramento: "'Sacramento', cursive",
     open: "'Open Sans', sans-serif",
-    tangerine: "'Tangerine', serif"
+    tangerine: "'Tangerine', serif",
+    vibes: "'Great Vibes', cursive"
   };
 
   check_font_family = () => {
@@ -25,13 +25,19 @@ class MyGoogleFont extends Component {
         return this.state.tangerine;
       case "pacifico":
         return this.state.pacifico;
+      case "labelle":
+        return this.state.labelle;
+      case "lobster":
+        return this.state.lobster;
+      case "vibes":
+        return this.state.vibes;
       default:
         return this.state.roboto_sans_serif;
     }
   };
   render() {
     return (
-      <div>
+      <span>
         <GoogleFontLoader
           fonts={[
             {
@@ -61,21 +67,24 @@ class MyGoogleFont extends Component {
             {
               font: "'Tangerine',serif",
               weights: [400, "400i"]
+            },
+            {
+              font: "'Great Vibes', cursive",
+              weights: [400, 700]
             }
           ]}
           subsets={["cyrillic-ext", "greek"]}
         />
-        <div
+        <span
           style={{
             fontFamily: this.check_font_family()
           }}
-          //className="tangerine"  // works fine
         >
           {this.props.text}
-        </div>
-      </div>
+        </span>
+      </span>
     );
   }
 }
 
-export default MyGoogleFont;
+export default GoogleFontNavItem;

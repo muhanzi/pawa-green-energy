@@ -11,15 +11,18 @@ h3 {
   align-items: center;
   justify-content: center;
   background-size: cover;
-  height: 800px;
+  height: 500px;
 }
 
-.each-slide span {
+/* .each-slide span {
   padding: 20px;
   font-size: 20px;
-  background: #efefef;
+  background: #f2f4f4;
   text-align: center;
-}
+  opacity: 1;
+  color: black;
+  font-weight: 900;
+} */
 
 .each-fade {
   display: flex;

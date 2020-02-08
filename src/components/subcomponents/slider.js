@@ -4,12 +4,35 @@ import image1 from "../../pictures/image1.jpg";
 import image2 from "../../pictures/image2.jpg";
 import image3 from "../../pictures/image3.jpg";
 import image4 from "../../pictures/image4.jpg";
-import image5 from "../../pictures/image5.jpg";
-import image6 from "../../pictures/image6.jpg";
 import "./slider_styles.css";
+import GoogleFontNavItem from "./fonts/googleFontForNavItems";
 
-// const slideImages = [image1, image2, image3, image4, image5, image6];
-const slideImages = [image1, image2, image3];
+const styles = { color: "white", fontWeight: "bolder" };
+
+const slideImages = [
+  {
+    img: image1,
+    description: "Power your home with solar energy",
+    description2: "order and pay your bill online !"
+  },
+  {
+    img: image2,
+    description: "#green4climate",
+    description2:
+      "Own a complete clean energy 200W solar system at your home and enjoy the fun."
+  },
+  {
+    img: image3,
+    description: "#Vision2030 3D",
+    description2: "Driven by Data and Digital"
+  },
+  {
+    img: image4,
+    description: "",
+    description2:
+      "For all your clean, green and smart energy solutions such as solar PV systems, solar water heating systems, cold rooms, solar fridges, lights (indoor and outdoor), etc. "
+  }
+];
 
 const properties = {
   duration: 5000,
@@ -22,36 +45,34 @@ const properties = {
 function Slider() {
   return (
     <Slide {...properties}>
-      <div className="each-slide">
-        <div style={{ backgroundImage: `url(${slideImages[0]})` }}>
-          <span>Slide 1</span>
-        </div>
-      </div>
-      <div className="each-slide">
-        <div style={{ backgroundImage: `url(${slideImages[1]})` }}>
-          <span>Slide 2</span>
-        </div>
-      </div>
-      <div className="each-slide">
-        <div style={{ backgroundImage: `url(${slideImages[2]})` }}>
-          <span>Slide 3</span>
-        </div>
-      </div>
-      {/* <div className="each-slide">
-        <div style={{ backgroundImage: `url(${slideImages[3]})` }}>
-          <span>Slide 4</span>
-        </div>
-      </div>
-      <div className="each-slide">
-        <div style={{ backgroundImage: `url(${slideImages[4]})` }}>
-          <span>Slide 5</span>
-        </div>
-      </div>
-      <div className="each-slide">
-        <div style={{ backgroundImage: `url(${slideImages[5]})` }}>
-          <span>Slide 6</span>
-        </div>
-      </div> */}
+      {slideImages.map(slide => {
+        return (
+          <div className="each-slide">
+            <div
+              style={{
+                backgroundImage: `url(${slide.img})`,
+                opacity: 1 // 0.7
+              }}
+            >
+              <span style={{ opacity: 1 }}>
+                {/* <span style={{ opacity: 0.8 }}> */}
+                <h1 style={styles}>
+                  <GoogleFontNavItem
+                    text={slide.description}
+                    fontfamily={"pacifico"}
+                  />
+                </h1>
+                <h3 style={styles}>
+                  <GoogleFontNavItem
+                    text={slide.description2}
+                    fontfamily={"pacifico"}
+                  />
+                </h3>
+              </span>
+            </div>
+          </div>
+        );
+      })}
     </Slide>
   );
 }
