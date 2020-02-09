@@ -4,10 +4,19 @@ import image1 from "../../pictures/image1.jpg";
 import image2 from "../../pictures/image2.jpg";
 import image3 from "../../pictures/image3.jpg";
 import image4 from "../../pictures/image4.jpg";
-import "./slider_styles.css";
+import "./styles/slider_styles.css";
 import GoogleFontNavItem from "./fonts/googleFontForNavItems";
 
-const styles = { color: "white", fontWeight: "bolder" };
+const styles = {
+  color: "white",
+  fontWeight: "bolder"
+  // fontSize: "4vw"
+}; // Viewport is the browser window size. 1vw = 1% of viewport width.
+const styles_2 = {
+  color: "white",
+  fontWeight: "bolder"
+  // fontSize: "3vw"
+};
 
 const slideImages = [
   {
@@ -62,7 +71,7 @@ function Slider() {
                     fontfamily={"pacifico"}
                   />
                 </h1>
-                <h3 style={styles}>
+                <h3 style={styles_2}>
                   <GoogleFontNavItem
                     text={slide.description2}
                     fontfamily={"pacifico"}

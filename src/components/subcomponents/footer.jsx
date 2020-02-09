@@ -8,7 +8,7 @@ const MyFooter = () => {
       <div
         style={{
           textAlign: "center",
-          height: 80,
+          minHeight: 80,
           paddingTop: 20,
           color: "white",
           backgroundColor: project().projectColor

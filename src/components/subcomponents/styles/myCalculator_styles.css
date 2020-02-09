@@ -1,0 +1,83 @@
+.box {
+  background: #1d8348;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  cursor: pointer;
+  text-align: center;
+  transition-property: background, border-top-right-radius,
+    border-top-left-radius;
+  transition-duration: 1s;
+  transition-timing-function: linear;
+}
+.box:hover {
+  background: #1d8348;
+  border-top-right-radius: 100px;
+  border-top-left-radius: 100px;
+}
+
+/* shake a component horizontally */
+.shake {
+  background: #1d8348;
+}
+.shake:hover {
+  animation: shakeanim;
+  animation-duration: 1s;
+  transform: translate3d(0, 0, 0);
+}
+
+@keyframes shakeanim {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+/* shake a component vertically */
+.shakethis {
+  background: #1d8348;
+  cursor: pointer;
+}
+.shakethis:hover {
+  animation: shakeanimation;
+  animation-duration: 1s;
+  transform: translate3d(0, 0, 0);
+}
+
+@keyframes shakeanimation {
+  10%,
+  90% {
+    transform: translate3d(0, -1px, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(0, 2px, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(0, -4px, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(0, 4px, 0);
+  }
+}

@@ -63,8 +63,7 @@ function Navigation() {
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     height: 70,
-    width: 70,
-    marginRight: 10
+    width: 70
   };
 
   return (
@@ -76,55 +75,51 @@ function Navigation() {
         variant="dark"
         style={{ backgroundColor: "white" }}
       >
-        <Navbar.Brand style={logo_style}></Navbar.Brand>
-        {/* 
-        // this also works well // but <Row> component is more professional
-        <span>
-          <span
-            style={{
-              color: "black",
-              fontWeight: "bold",
-              fontSize: 20
-            }}
-          >
-            <MyGoogleFont text={project().companyName} />
-          </span>
-          <span>
-            <i>Think energy Think smart</i>
-          </span>
-        </span> */}
-        <div>
-          <Row>
-            <Col
-              style={{
-                color: "black",
-                fontWeight: "bold",
-                fontSize: 20,
-                textShadow: "4px 4px 4px #aaa"
-              }}
-            >
-              <GoogleFont text={project().companyName} fontfamily="tangerine" />
-            </Col>
-          </Row>
-          <Row>
-            <Col
-              style={{
-                fontSize: 13,
-                textShadow: "4px 4px 4px #aaa"
-              }}
-            >
-              <i>
-                <GoogleFont
-                  text={"Think energy Think smart"}
-                  fontfamily="pacifico"
-                />
-              </i>
-            </Col>
-          </Row>
-        </div>
+        <Navbar.Brand>
+          <div>
+            <Row>
+              <Col style={logo_style}></Col>
+              <Col style={{ paddingRight: 0, paddingLeft: 5, paddingTop: 10 }}>
+                <Row>
+                  <Col
+                    style={{
+                      color: "black",
+                      fontWeight: "bold",
+                      fontSize: 20,
+                      textShadow: "4px 4px 4px #aaa"
+                    }}
+                  >
+                    <GoogleFont
+                      text={project().companyName}
+                      fontfamily="tangerine"
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col
+                    style={{
+                      fontSize: 13,
+                      textShadow: "4px 4px 4px #aaa",
+                      color: "black"
+                    }}
+                  >
+                    <i>
+                      <GoogleFont
+                        text={"Think energy Think smart"}
+                        fontfamily="pacifico"
+                      />
+                    </i>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </div>
+        </Navbar.Brand>
         <Navbar.Toggle
           aria-controls="responsive-navbar-nav"
-          style={{ backgroundColor: project().projectColor }}
+          style={{
+            backgroundColor: project().projectColor
+          }}
         />
         <Navbar.Collapse
           id="responsive-navbar-nav"

@@ -12,12 +12,20 @@ import epe from "../pictures/epe.jpg";
 import crs from "../pictures/crs.jpg";
 import sab from "../pictures/sab.jpg";
 import GoogleFontNavItem from "./subcomponents/fonts/googleFontForNavItems";
+import "./subcomponents/styles/myCalculator_styles.css";
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
+
+  calculator_col_style = {
+    borderRight: "1px solid #eee",
+    borderBottom: "1px solid #eee",
+    minHeight: 80,
+    paddingTop: 25
+  };
 
   cards_data = [
     {
@@ -102,6 +110,22 @@ class Home extends Component {
     }
   ];
 
+  energy_calculator = () => {
+    alert("energy calculator");
+  };
+
+  solar_calculator = () => {
+    alert("solar calculator");
+  };
+
+  water_calculator = () => {
+    alert("water pump calculator");
+  };
+
+  carbon_calculator = () => {
+    alert("carbon footprint calculator");
+  };
+
   render() {
     return (
       <div
@@ -135,6 +159,80 @@ class Home extends Component {
               );
             })}
           </Row>
+          <Row style={{ paddingBottom: 30, paddingTop: 10 }}>
+            <span
+              style={{
+                margin: "auto",
+                fontSize: 30,
+                fontWeight: "bold"
+              }}
+            >
+              <GoogleFontNavItem
+                text={"My Calculator"}
+                fontfamily={"labelle"}
+              />
+            </span>
+          </Row>
+          <Row
+            style={{
+              textAlign: "center",
+              minHeight: 80,
+              color: "white"
+            }}
+          >
+            <Col
+              className="shakethis"
+              style={this.calculator_col_style}
+              onClick={this.energy_calculator}
+            >
+              <GoogleFontNavItem
+                text={"energy calculator"}
+                fontfamily={"pacifico"}
+              />
+            </Col>
+            <Col
+              className="shakethis"
+              style={this.calculator_col_style}
+              onClick={this.solar_calculator}
+            >
+              <GoogleFontNavItem
+                text={"solar calculator"}
+                fontfamily={"pacifico"}
+              />
+            </Col>
+            <Col
+              className="shakethis"
+              style={this.calculator_col_style}
+              onClick={this.water_calculator}
+            >
+              <GoogleFontNavItem
+                text={"water pump calculator"}
+                fontfamily={"pacifico"}
+              />
+            </Col>
+            <Col
+              className="shakethis"
+              style={this.calculator_col_style}
+              onClick={this.carbon_calculator}
+            >
+              <GoogleFontNavItem
+                text={"carbon footprint calculator"}
+                fontfamily={"pacifico"}
+              />
+            </Col>
+          </Row>
+          <Row style={{ paddingTop: 20, paddingBottom: 30 }}>
+            <span
+              style={{
+                margin: "auto",
+                fontSize: 30,
+                fontWeight: "bold"
+              }}
+            >
+              <GoogleFontNavItem text={"Our Partners"} fontfamily={"labelle"} />
+            </span>
+          </Row>
+          <Row></Row>
           <Row style={{ paddingBottom: 30 }}>
             <span
               style={{
@@ -144,17 +242,13 @@ class Home extends Component {
               }}
             >
               <GoogleFontNavItem
-                text={"Energy Calculator"}
+                text={"What's new about Solar Energy ?"}
                 fontfamily={"labelle"}
               />
             </span>
           </Row>
-          <Row style={{ margin: "auto", textAlign: "center" }}>
-            <Col>energy calculator</Col>
-            <Col>solar calculator</Col>
-            <Col>carbon footprint calculator</Col>
-            <Col>Green4climate</Col>
-          </Row>
+          <Row></Row>
+          <Row></Row>
         </Container>
       </div>
     );

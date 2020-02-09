@@ -1,4 +1,5 @@
-import project from "./static";
+import project from "../static";
+
 export default function projectStyles() {
   const myStyle = {
     mycenter: {
