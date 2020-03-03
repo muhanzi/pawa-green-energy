@@ -1,7 +1,17 @@
 import React, { Component } from "react";
 import project from "./subcomponents/static";
 import Slider from "./subcomponents/slider";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Modal, Button, FormGroup } from "react-bootstrap";
+import {
+  MDBContainer,
+  MDBDataTable,
+  MDBBtn,
+  MDBTable,
+  MDBTableBody
+} from "mdbreact";
+import FloatingLabelInput from "react-floating-label-input";
+import $ from "jquery";
+import { Checkbox, withStyles, FormControlLabel } from "@material-ui/core";
 import Card from "./subcomponents/card";
 import image3 from "../pictures/image3.jpg";
 import sws from "../pictures/sws.jpg";
@@ -13,11 +23,12 @@ import crs from "../pictures/crs.jpg";
 import sab from "../pictures/sab.jpg";
 import GoogleFontNavItem from "./subcomponents/fonts/googleFontForNavItems";
 import "./subcomponents/styles/myCalculator_styles.css";
+import projectStyles from "./subcomponents/styles/Styles";
 
 class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { energyCalculatorModal: false };
   }
 
   calculator_col_style = {
@@ -111,7 +122,8 @@ class Home extends Component {
   ];
 
   energy_calculator = () => {
-    alert("energy calculator");
+    // alert("energy calculator");
+    this.setState({ energyCalculatorModal: true });
   };
 
   solar_calculator = () => {
@@ -124,6 +136,10 @@ class Home extends Component {
 
   carbon_calculator = () => {
     alert("carbon footprint calculator");
+  };
+
+  HideEnergyCalculatorModal = () => {
+    this.setState({ energyCalculatorModal: false });
   };
 
   render() {
@@ -250,6 +266,144 @@ class Home extends Component {
           <Row></Row>
           <Row></Row>
         </Container>
+        {/* popup window for energy calculator */}
+        <Modal
+          show={this.state.energyCalculatorModal}
+          onHide={this.HideEnergyCalculatorModal}
+          size="lg"
+          centered
+        >
+          <form>
+            <Modal.Header closeButton>
+              <Modal.Title>
+                <span
+                  style={projectStyles().spanStyle2}
+                  className="badge badge m-2"
+                >
+                  {"Energy calculator"}
+                </span>
+              </Modal.Title>
+            </Modal.Header>
+
+            <Modal.Body>
+              <p>
+                <MDBTable>
+                  <MDBTableBody>
+                    <Row>
+                      <Col>Device</Col>
+                      <Col>
+                        <FormGroup>
+                          <FloatingLabelInput
+                            id="LoginUsernameId"
+                            label={"television"}
+                            onBlur=""
+                            style={{ fontSize: 15, fontFamilly: "sans-serif" }}
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col>Number</Col>
+                      <Col>
+                        <FormGroup>
+                          <FloatingLabelInput
+                            id="LoginUsernameId"
+                            label={"1"}
+                            onBlur=""
+                            style={{ fontSize: 15, fontFamilly: "sans-serif" }}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>PWatts</Col>
+                      <Col>
+                        <FormGroup>
+                          <FloatingLabelInput
+                            id="LoginUsernameId"
+                            label={1000}
+                            disabled
+                            onBlur=""
+                            style={{ fontSize: 15, fontFamilly: "sans-serif" }}
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col>perDay</Col>
+                      <Col>
+                        <FormGroup>
+                          <FloatingLabelInput
+                            id="LoginUsernameId"
+                            label={"1 hour"}
+                            onBlur=""
+                            style={{ fontSize: 15, fontFamilly: "sans-serif" }}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>PWatts</Col>
+                      <Col>
+                        <FormGroup>
+                          <FloatingLabelInput
+                            id="LoginUsernameId"
+                            disabled
+                            label={1000}
+                            onBlur=""
+                            style={{ fontSize: 15, fontFamilly: "sans-serif" }}
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col>perWeek</Col>
+                      <Col>
+                        <FormGroup>
+                          <FloatingLabelInput
+                            id="LoginUsernameId"
+                            label={"1 day"}
+                            onBlur=""
+                            style={{ fontSize: 15, fontFamilly: "sans-serif" }}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>PWatts</Col>
+                      <Col>
+                        <FormGroup>
+                          <FloatingLabelInput
+                            id="LoginUsernameId"
+                            disabled
+                            label={1000}
+                            onBlur=""
+                            style={{ fontSize: 15, fontFamilly: "sans-serif" }}
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col>perMonth</Col>
+                      <Col>
+                        <FormGroup>
+                          <FloatingLabelInput
+                            id="LoginUsernameId"
+                            label={"1 week "}
+                            onBlur=""
+                            style={{ fontSize: 15, fontFamilly: "sans-serif" }}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </MDBTableBody>
+                </MDBTable>
+              </p>
+            </Modal.Body>
+
+            <Modal.Footer>
+              <MDBBtn
+                className="btn-success"
+                style={projectStyles().buttonStyle}
+                onClick={this.HideEnergyCalculatorModal}
+              >
+                Close
+              </MDBBtn>
+            </Modal.Footer>
+          </form>
+        </Modal>
       </div>
     );
   }

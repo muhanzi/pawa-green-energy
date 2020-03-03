@@ -9,7 +9,7 @@ import {
 } from "../../actions";
 import ContactBar from "./contactBar";
 import styled from "styled-components";
-import logo from "../../pictures/logo_icon.PNG";
+import logo from "../../pictures/favicon.PNG";
 import GoogleFont from "./fonts/googleFont";
 import GoogleFontNavItem from "./fonts/googleFontForNavItems";
 

@@ -18,11 +18,11 @@ function ContactBar() {
               href="http://pawagreenenergy@gmail.com"
               style={{ color: "white" }}
             >
-              pawagreenenergy@gmail.com
+              info@pawagreenenergy.com
             </a>
           </Col>
           <Col dm={4} style={{ minHeight: 30 }}>
-            Tel: +256775075557 +256755800710
+            Tel: +256773218545
           </Col>
           <Col dm={4} style={{ minHeight: 30 }}>
             TIN: 1014728519

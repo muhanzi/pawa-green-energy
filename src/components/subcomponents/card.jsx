@@ -98,11 +98,13 @@ class Card extends Component {
                   />
                 </MDBCardText>
                 <Button
+                  // hidden
                   href="#"
                   variant="success"
                   style={{
                     backgroundColor: project().projectColor,
-                    color: "white"
+                    color: "white",
+                    marginTop: 2
                   }}
                   onClick={this.checkButtonAction}
                 >
