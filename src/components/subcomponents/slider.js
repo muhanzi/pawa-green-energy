@@ -68,13 +68,13 @@ function Slider() {
                 <h1 style={styles}>
                   <GoogleFontNavItem
                     text={slide.description}
-                    fontfamily={"pacifico"}
+                    fontfamily={"tangerine"}
                   />
                 </h1>
                 <h3 style={styles_2}>
                   <GoogleFontNavItem
                     text={slide.description2}
-                    fontfamily={"pacifico"}
+                    fontfamily={"tangerine"}
                   />
                 </h3>
               </span>

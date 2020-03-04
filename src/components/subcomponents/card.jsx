@@ -61,7 +61,8 @@ class Card extends Component {
               width: "15rem",
               border: 0,
               paddingTop: 0,
-              backgroundColor: project().home_component_background_color
+              backgroundColor: project().home_component_background_color,
+              margin: "0 auto"
             }}
           >
             <Box
@@ -85,7 +86,7 @@ class Card extends Component {
                 <MDBCardTitle style={{ fontSize: 15 }}>
                   <GoogleFontNavItem
                     text={this.props.data.title}
-                    fontfamily={"sacramento"}
+                    fontfamily={"tangerine"}
                   />
                 </MDBCardTitle>
                 <MDBCardText
@@ -94,12 +95,11 @@ class Card extends Component {
                 >
                   <GoogleFontNavItem
                     text={this.props.data.details}
-                    fontfamily={"sacramento"}
+                    fontfamily={"tangerine"}
                   />
                 </MDBCardText>
                 <Button
                   // hidden
-                  href="#"
                   variant="success"
                   style={{
                     backgroundColor: project().projectColor,
@@ -110,7 +110,7 @@ class Card extends Component {
                 >
                   <GoogleFontNavItem
                     text={this.props.data.buttonText}
-                    fontfamily={"sacramento"}
+                    fontfamily={"tangerine"}
                   />
                 </Button>
               </MDBCardBody>

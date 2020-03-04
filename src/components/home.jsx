@@ -9,6 +9,8 @@ import {
   MDBTable,
   MDBTableBody
 } from "mdbreact";
+import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 import FloatingLabelInput from "react-floating-label-input";
 import $ from "jquery";
 import { Checkbox, withStyles, FormControlLabel } from "@material-ui/core";
@@ -28,7 +30,22 @@ import projectStyles from "./subcomponents/styles/Styles";
 class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = { energyCalculatorModal: false };
+    this.state = {
+      energyCalculatorModal: false,
+      device: "",
+      devicePowerWatts: 0,
+      powerWattsPerDay: 0,
+      powerWattsPerWeek: 0,
+      powerWattsPerMonth: 0,
+      weeks_per_month: "",
+      days_per_week: "",
+      hours_per_day: "",
+      number_of_devices: "",
+      number_of_devices_error: "0px",
+      hours_per_day_error: "0px",
+      days_per_week_error: "0px",
+      weeks_per_month_error: "0px"
+    };
   }
 
   calculator_col_style = {
@@ -121,6 +138,44 @@ class Home extends Component {
     }
   ];
 
+  select_devices = [
+    { title: "Air-Conditioner 1000w", power: 1000 },
+    { title: "Air-Conditioner 1500w", power: 1500 },
+    { title: "CFL Lamp 5w", power: 5 },
+    { title: "CFL Lamp 8w", power: 8 },
+    { title: "CFL Lamp 11w", power: 11 },
+    { title: "CFL Lamp 15w", power: 15 },
+    { title: "CFL Lamp 20w", power: 20 },
+    { title: "Computer 200w", power: 200 },
+    { title: "Electric Iron 600w", power: 600 },
+    { title: "Electric Iron 1000w", power: 1000 },
+    { title: "Exhaust Fan 150w", power: 150 },
+    { title: "Immersion Heater 1000w", power: 1000 },
+    { title: "Immersion Heater 1500w", power: 1500 },
+    { title: "Microwave Oven 1500w", power: 1500 },
+    { title: "Mixer cum Grinder 200w", power: 200 },
+    { title: "Pump Motor 380w", power: 380 },
+    { title: "Pump Motor 740w", power: 740 },
+    { title: "Radio 40w", power: 40 },
+    { title: "Refrigetor(165 litres) 150w", power: 150 },
+    { title: "Refrigetor(210 litres) 270w", power: 270 },
+    { title: "Regular Lamp 25w", power: 25 },
+    { title: "Regular Lamp 40w", power: 40 },
+    { title: "Regular Lamp 60w", power: 60 },
+    { title: "Regular Lamp 100w", power: 100 },
+    { title: "Home Heater 1000w", power: 1000 },
+    { title: "Home Heater 1500w", power: 1500 },
+    { title: "Home Heater 2000w", power: 2000 },
+    { title: "Table Fan/Ceiling Fan 60w", power: 60 },
+    { title: "Table Fan/Ceiling Fan 100w", power: 100 },
+    { title: "Television 200w", power: 200 },
+    { title: "Toaster 750w", power: 750 },
+    { title: "Washing Machine 700w", power: 700 },
+    { title: "Water Heater/Geyser 1000w", power: 1000 },
+    { title: "Water Heater/Geyser 1500w", power: 1500 },
+    { title: "Water Heater/Geyser 2000w", power: 2000 }
+  ];
+
   energy_calculator = () => {
     // alert("energy calculator");
     this.setState({ energyCalculatorModal: true });
@@ -140,6 +195,139 @@ class Home extends Component {
 
   HideEnergyCalculatorModal = () => {
     this.setState({ energyCalculatorModal: false });
+  };
+
+  // My calculator
+  // 1. energy calculator
+  // --------------------
+  device_selected(power_value) {
+    // change state of input fields
+    this.setState({
+      devicePowerWatts: power_value,
+      powerWattsPerDay: power_value,
+      powerWattsPerWeek: power_value,
+      powerWattsPerMonth: power_value,
+      number_of_devices: 1,
+      hours_per_day: 1,
+      days_per_week: 1,
+      weeks_per_month: 1
+    });
+  }
+  handle_changed_number_of_devices = event => {
+    this.setState({
+      number_of_devices: event.target.value
+    });
+    if (event.target.value > 0) {
+      this.setState({
+        powerWattsPerDay:
+          event.target.value *
+          this.state.devicePowerWatts *
+          Number.parseInt(this.state.hours_per_day),
+        powerWattsPerWeek:
+          event.target.value *
+          this.state.devicePowerWatts *
+          Number.parseInt(this.state.hours_per_day) *
+          Number.parseInt(this.state.days_per_week),
+        powerWattsPerMonth:
+          event.target.value *
+          this.state.devicePowerWatts *
+          Number.parseInt(this.state.hours_per_day) *
+          Number.parseInt(this.state.days_per_week) *
+          Number.parseInt(this.state.weeks_per_month),
+        number_of_devices_error: "0px"
+      });
+    } else {
+      this.setState({
+        number_of_devices_error: "1px solid red"
+      });
+    }
+  };
+  handle_changed_hours_per_day = event => {
+    this.setState({
+      hours_per_day: event.target.value
+    }); // first change the value of the input the check if it passes the condition
+    if (event.target.value > 0 && event.target.value <= 24) {
+      this.setState({
+        powerWattsPerDay:
+          event.target.value *
+          this.state.devicePowerWatts *
+          Number.parseInt(this.state.number_of_devices),
+        powerWattsPerWeek:
+          event.target.value *
+          Number.parseInt(this.state.days_per_week) *
+          this.state.devicePowerWatts *
+          Number.parseInt(this.state.number_of_devices),
+        powerWattsPerMonth:
+          event.target.value *
+          Number.parseInt(this.state.days_per_week) *
+          Number.parseInt(this.state.weeks_per_month) *
+          this.state.devicePowerWatts *
+          Number.parseInt(this.state.number_of_devices),
+        hours_per_day_error: "0px"
+      });
+    } else {
+      this.setState({
+        hours_per_day_error: "1px solid red"
+      });
+    }
+  };
+  handle_changed_days_per_week = event => {
+    this.setState({
+      days_per_week: event.target.value
+    });
+    if (event.target.value > 0 && event.target.value <= 7) {
+      this.setState({
+        powerWattsPerDay:
+          Number.parseInt(this.state.hours_per_day) *
+          this.state.devicePowerWatts *
+          Number.parseInt(this.state.number_of_devices),
+        powerWattsPerWeek:
+          Number.parseInt(this.state.hours_per_day) *
+          event.target.value *
+          this.state.devicePowerWatts *
+          Number.parseInt(this.state.number_of_devices),
+        powerWattsPerMonth:
+          Number.parseInt(this.state.hours_per_day) *
+          event.target.value *
+          Number.parseInt(this.state.weeks_per_month) *
+          this.state.devicePowerWatts *
+          Number.parseInt(this.state.number_of_devices),
+        days_per_week_error: "0px"
+      });
+    } else {
+      this.setState({
+        days_per_week_error: "1px solid red"
+      });
+    }
+  };
+  handle_changed_weeks_per_month = event => {
+    this.setState({
+      weeks_per_month: event.target.value
+    });
+    if (event.target.value > 0 && event.target.value <= 4) {
+      this.setState({
+        powerWattsPerDay:
+          Number.parseInt(this.state.hours_per_day) *
+          this.state.devicePowerWatts *
+          Number.parseInt(this.state.number_of_devices),
+        powerWattsPerWeek:
+          Number.parseInt(this.state.hours_per_day) *
+          Number.parseInt(this.state.days_per_week) *
+          this.state.devicePowerWatts *
+          Number.parseInt(this.state.number_of_devices),
+        powerWattsPerMonth:
+          Number.parseInt(this.state.hours_per_day) *
+          Number.parseInt(this.state.days_per_week) *
+          event.target.value *
+          this.state.devicePowerWatts *
+          Number.parseInt(this.state.number_of_devices),
+        weeks_per_month_error: "0px"
+      });
+    } else {
+      this.setState({
+        weeks_per_month_error: "1px solid red"
+      });
+    }
   };
 
   render() {
@@ -169,7 +357,12 @@ class Home extends Component {
           <Row>
             {this.cards_data.map(data => {
               return (
-                <Col dm={3} style={{ paddingBottom: 20 }}>
+                <Col
+                  dm={3}
+                  style={{
+                    paddingBottom: 20
+                  }}
+                >
                   <Card data={data} />
                 </Col>
               );
@@ -203,7 +396,7 @@ class Home extends Component {
             >
               <GoogleFontNavItem
                 text={"energy calculator"}
-                fontfamily={"pacifico"}
+                fontfamily={"tangerine"}
               />
             </Col>
             <Col
@@ -213,7 +406,7 @@ class Home extends Component {
             >
               <GoogleFontNavItem
                 text={"solar calculator"}
-                fontfamily={"pacifico"}
+                fontfamily={"tangerine"}
               />
             </Col>
             <Col
@@ -223,7 +416,7 @@ class Home extends Component {
             >
               <GoogleFontNavItem
                 text={"water pump calculator"}
-                fontfamily={"pacifico"}
+                fontfamily={"tangerine"}
               />
             </Col>
             <Col
@@ -233,7 +426,7 @@ class Home extends Component {
             >
               <GoogleFontNavItem
                 text={"carbon footprint calculator"}
-                fontfamily={"pacifico"}
+                fontfamily={"tangerine"}
               />
             </Col>
           </Row>
@@ -292,23 +485,43 @@ class Home extends Component {
                     <Row>
                       <Col>Device</Col>
                       <Col>
-                        <FormGroup>
-                          <FloatingLabelInput
-                            id="LoginUsernameId"
-                            label={"television"}
-                            onBlur=""
-                            style={{ fontSize: 15, fontFamilly: "sans-serif" }}
-                          />
-                        </FormGroup>
+                        <Autocomplete
+                          id="select"
+                          options={this.select_devices}
+                          getOptionLabel={option => option.title} // is like a forEach to fill the select tag options
+                          onChange={(event, value) => {
+                            //console.log(value); // an object with title and power values
+                            this.device_selected(value.power);
+                          }}
+                          style={{
+                            width: 175
+                          }}
+                          size="small"
+                          renderInput={params => (
+                            <TextField
+                              {...params}
+                              label="Device"
+                              variant="outlined"
+                              color="primary" // or secondary
+                            />
+                          )}
+                        />
                       </Col>
                       <Col>Number</Col>
                       <Col>
                         <FormGroup>
                           <FloatingLabelInput
-                            id="LoginUsernameId"
+                            id="numberOfDevices"
                             label={"1"}
+                            onChange={this.handle_changed_number_of_devices}
+                            value={this.state.number_of_devices}
                             onBlur=""
-                            style={{ fontSize: 15, fontFamilly: "sans-serif" }}
+                            style={{
+                              fontSize: 15,
+                              fontFamilly: "sans-serif",
+                              border: this.state.number_of_devices_error,
+                              borderRadius: "5px"
+                            }}
                           />
                         </FormGroup>
                       </Col>
@@ -318,8 +531,9 @@ class Home extends Component {
                       <Col>
                         <FormGroup>
                           <FloatingLabelInput
-                            id="LoginUsernameId"
-                            label={1000}
+                            id="powerWattsPerDay"
+                            // label={0}
+                            value={this.state.powerWattsPerDay}
                             disabled
                             onBlur=""
                             style={{ fontSize: 15, fontFamilly: "sans-serif" }}
@@ -330,10 +544,17 @@ class Home extends Component {
                       <Col>
                         <FormGroup>
                           <FloatingLabelInput
-                            id="LoginUsernameId"
-                            label={"1 hour"}
+                            id="hoursPerDay"
+                            label={"hours"}
+                            onChange={this.handle_changed_hours_per_day}
+                            value={this.state.hours_per_day}
                             onBlur=""
-                            style={{ fontSize: 15, fontFamilly: "sans-serif" }}
+                            style={{
+                              fontSize: 15,
+                              fontFamilly: "sans-serif",
+                              border: this.state.hours_per_day_error,
+                              borderRadius: "5px"
+                            }}
                           />
                         </FormGroup>
                       </Col>
@@ -343,9 +564,10 @@ class Home extends Component {
                       <Col>
                         <FormGroup>
                           <FloatingLabelInput
-                            id="LoginUsernameId"
+                            id="powerWattsPerWeek"
+                            // label={0}
+                            value={this.state.powerWattsPerWeek}
                             disabled
-                            label={1000}
                             onBlur=""
                             style={{ fontSize: 15, fontFamilly: "sans-serif" }}
                           />
@@ -355,10 +577,17 @@ class Home extends Component {
                       <Col>
                         <FormGroup>
                           <FloatingLabelInput
-                            id="LoginUsernameId"
-                            label={"1 day"}
+                            id="daysPerWeek"
+                            label={"days"}
+                            onChange={this.handle_changed_days_per_week}
+                            value={this.state.days_per_week}
                             onBlur=""
-                            style={{ fontSize: 15, fontFamilly: "sans-serif" }}
+                            style={{
+                              fontSize: 15,
+                              fontFamilly: "sans-serif",
+                              border: this.state.days_per_week_error,
+                              borderRadius: "5px"
+                            }}
                           />
                         </FormGroup>
                       </Col>
@@ -368,11 +597,15 @@ class Home extends Component {
                       <Col>
                         <FormGroup>
                           <FloatingLabelInput
-                            id="LoginUsernameId"
+                            id="powerWattsPerMonth"
+                            // label={0}
+                            value={this.state.powerWattsPerMonth}
                             disabled
-                            label={1000}
                             onBlur=""
-                            style={{ fontSize: 15, fontFamilly: "sans-serif" }}
+                            style={{
+                              fontSize: 15,
+                              fontFamilly: "sans-serif"
+                            }}
                           />
                         </FormGroup>
                       </Col>
@@ -380,10 +613,17 @@ class Home extends Component {
                       <Col>
                         <FormGroup>
                           <FloatingLabelInput
-                            id="LoginUsernameId"
-                            label={"1 week "}
+                            id="weeksPerMonth"
+                            label={"weeks"}
+                            onChange={this.handle_changed_weeks_per_month}
+                            value={this.state.weeks_per_month}
                             onBlur=""
-                            style={{ fontSize: 15, fontFamilly: "sans-serif" }}
+                            style={{
+                              fontSize: 15,
+                              fontFamilly: "sans-serif",
+                              border: this.state.weeks_per_month_error,
+                              borderRadius: "5px"
+                            }}
                           />
                         </FormGroup>
                       </Col>
