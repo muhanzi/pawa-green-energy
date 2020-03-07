@@ -1,9 +1,9 @@
 import React from "react";
 import { Slide } from "react-slideshow-image";
-import image1 from "../../pictures/image1.jpg";
-import image2 from "../../pictures/image2.jpg";
-import image3 from "../../pictures/image3.jpg";
-import image4 from "../../pictures/image4.jpg";
+import image1 from "../../pictures/image1.webp";
+import image2 from "../../pictures/image2.webp";
+import image3 from "../../pictures/image3.webp";
+import image4 from "../../pictures/image4.webp";
 import "./styles/slider_styles.css";
 import GoogleFontNavItem from "./fonts/googleFontForNavItems";
 

@@ -15,7 +15,7 @@ import FloatingLabelInput from "react-floating-label-input";
 import $ from "jquery";
 import { Checkbox, withStyles, FormControlLabel } from "@material-ui/core";
 import Card from "./subcomponents/card";
-import image3 from "../pictures/image3.jpg";
+import image3 from "../pictures/image3.webp";
 import sws from "../pictures/sws.jpg";
 import sls from "../pictures/sls.jpg";
 import esc from "../pictures/esc.jpg";
@@ -44,7 +44,8 @@ class Home extends Component {
       number_of_devices_error: "0px",
       hours_per_day_error: "0px",
       days_per_week_error: "0px",
-      weeks_per_month_error: "0px"
+      weeks_per_month_error: "0px",
+      total_units: "00"
     };
   }
 
@@ -210,7 +211,8 @@ class Home extends Component {
       number_of_devices: 1,
       hours_per_day: 1,
       days_per_week: 1,
-      weeks_per_month: 1
+      weeks_per_month: 1,
+      total_units: "00"
     });
   }
   handle_changed_number_of_devices = event => {
@@ -234,6 +236,13 @@ class Home extends Component {
           Number.parseInt(this.state.hours_per_day) *
           Number.parseInt(this.state.days_per_week) *
           Number.parseInt(this.state.weeks_per_month),
+        total_units: this.calculate_total_units(
+          event.target.value,
+          this.state.devicePowerWatts,
+          Number.parseInt(this.state.hours_per_day),
+          Number.parseInt(this.state.days_per_week),
+          Number.parseInt(this.state.weeks_per_month)
+        ),
         number_of_devices_error: "0px"
       });
     } else {
@@ -263,6 +272,13 @@ class Home extends Component {
           Number.parseInt(this.state.weeks_per_month) *
           this.state.devicePowerWatts *
           Number.parseInt(this.state.number_of_devices),
+        total_units: this.calculate_total_units(
+          event.target.value,
+          Number.parseInt(this.state.days_per_week),
+          Number.parseInt(this.state.weeks_per_month),
+          this.state.devicePowerWatts,
+          Number.parseInt(this.state.number_of_devices)
+        ),
         hours_per_day_error: "0px"
       });
     } else {
@@ -292,6 +308,13 @@ class Home extends Component {
           Number.parseInt(this.state.weeks_per_month) *
           this.state.devicePowerWatts *
           Number.parseInt(this.state.number_of_devices),
+        total_units: this.calculate_total_units(
+          Number.parseInt(this.state.hours_per_day),
+          event.target.value,
+          Number.parseInt(this.state.weeks_per_month),
+          this.state.devicePowerWatts,
+          Number.parseInt(this.state.number_of_devices)
+        ),
         days_per_week_error: "0px"
       });
     } else {
@@ -321,6 +344,13 @@ class Home extends Component {
           event.target.value *
           this.state.devicePowerWatts *
           Number.parseInt(this.state.number_of_devices),
+        total_units: this.calculate_total_units(
+          Number.parseInt(this.state.hours_per_day),
+          Number.parseInt(this.state.days_per_week),
+          event.target.value,
+          this.state.devicePowerWatts,
+          Number.parseInt(this.state.number_of_devices)
+        ),
         weeks_per_month_error: "0px"
       });
     } else {
@@ -329,6 +359,28 @@ class Home extends Component {
       });
     }
   };
+
+  calculate_total_units(
+    number_of_devices,
+    devicePowerWatts,
+    hours_per_day,
+    days_per_week,
+    weeks_per_month
+  ) {
+    let units;
+    try {
+      units =
+        (number_of_devices *
+          devicePowerWatts *
+          hours_per_day *
+          days_per_week *
+          weeks_per_month) /
+        1000;
+    } catch (error) {
+      units = "00";
+    }
+    return units;
+  }
 
   render() {
     return (
@@ -626,6 +678,24 @@ class Home extends Component {
                             }}
                           />
                         </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col
+                        style={{
+                          textAlign: "center",
+                          color: project().projectColor,
+                          fontWeight: "bolder",
+                          fontSize: 28
+                        }}
+                      >
+                        <span>
+                          Total is {this.state.total_units} units{" "}
+                          {/* <GoogleFontNavItem
+                            text={"Total is "+this.state.total_units+" units"}
+                            fontfamily={"pacifico"}
+                          /> */}
+                        </span>
                       </Col>
                     </Row>
                   </MDBTableBody>
