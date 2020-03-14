@@ -1,7 +1,15 @@
 import React, { Component } from "react";
 import project from "./subcomponents/static";
 import Slider from "./subcomponents/slider";
-import { Container, Row, Col, Modal, Button, FormGroup } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Modal,
+  Button,
+  FormGroup,
+  Image
+} from "react-bootstrap";
 import {
   MDBContainer,
   MDBDataTable,
@@ -26,6 +34,13 @@ import sab from "../pictures/sab.jpg";
 import GoogleFontNavItem from "./subcomponents/fonts/googleFontForNavItems";
 import "./subcomponents/styles/myCalculator_styles.css";
 import projectStyles from "./subcomponents/styles/Styles";
+import eeau from "../pictures/energy efficie cy association of uganda.png";
+import unreeea from "../pictures/unreeea.png";
+import choice_delivery from "../pictures/choice delivery.png";
+import gabrial from "../pictures/gabriel sustainable solutions.PNG";
+import aotconsulting from "../pictures/aotconsulting.png";
+import poweroneforone from "../pictures/poweroneforone.png";
+import aream from "../pictures/aream.webp";
 
 class Home extends Component {
   constructor(props) {
@@ -382,6 +397,16 @@ class Home extends Component {
     return units;
   }
 
+  our_partners = [
+    { picture: eeau, link: "http://unreeea.org/members/eeau/" },
+    { picture: unreeea, link: "http://unreeea.org/" },
+    { picture: choice_delivery, link: "http://en.choicexp.com/info621.html" },
+    { picture: gabrial, link: "#" },
+    { picture: aotconsulting, link: "https://www.aotconsulting.co.ug/" },
+    { picture: poweroneforone, link: "http://poweroneforone.de/" },
+    { picture: aream, link: "https://www.aream.de/" }
+  ];
+
   render() {
     return (
       <div
@@ -493,8 +518,35 @@ class Home extends Component {
               <GoogleFontNavItem text={"Our Partners"} fontfamily={"labelle"} />
             </span>
           </Row>
-          <Row></Row>
-          <Row style={{ paddingBottom: 30 }}>
+          <Row
+            style={{
+              backgroundColor: "white",
+              minHeight: 120
+            }}
+          >
+            {this.our_partners.map(data => {
+              return (
+                <Col
+                  dm={3}
+                  style={{
+                    margin: "auto",
+                    textAlign: "center"
+                  }}
+                >
+                  <a href={data.link}>
+                    <Image
+                      src={data.picture}
+                      style={{
+                        height: 80,
+                        width: 110
+                      }}
+                    />
+                  </a>
+                </Col>
+              );
+            })}
+          </Row>
+          <Row style={{ paddingBottom: 30, paddingTop: 20 }}>
             <span
               style={{
                 margin: "auto",
@@ -568,6 +620,7 @@ class Home extends Component {
                             onChange={this.handle_changed_number_of_devices}
                             value={this.state.number_of_devices}
                             onBlur=""
+                            type="number"
                             style={{
                               fontSize: 15,
                               fontFamilly: "sans-serif",
@@ -601,6 +654,7 @@ class Home extends Component {
                             onChange={this.handle_changed_hours_per_day}
                             value={this.state.hours_per_day}
                             onBlur=""
+                            type="number"
                             style={{
                               fontSize: 15,
                               fontFamilly: "sans-serif",
@@ -634,6 +688,7 @@ class Home extends Component {
                             onChange={this.handle_changed_days_per_week}
                             value={this.state.days_per_week}
                             onBlur=""
+                            type="number"
                             style={{
                               fontSize: 15,
                               fontFamilly: "sans-serif",
@@ -670,6 +725,7 @@ class Home extends Component {
                             onChange={this.handle_changed_weeks_per_month}
                             value={this.state.weeks_per_month}
                             onBlur=""
+                            type="number"
                             style={{
                               fontSize: 15,
                               fontFamilly: "sans-serif",
