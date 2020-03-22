@@ -1,0 +1,14 @@
+.photo {
+  height: "300px";
+  width: "400px";
+}
+
+.photo:hover {
+  box-shadow: "0 8px 16px 16px rgba(0, 0, 0, 0.2), 0 12px 40px 40px rgba(0, 0, 0, 0.19)";
+}
+
+.photo2 {
+  height: "300px";
+  width: "400px";
+  box-shadow: "0 8px 16px 16px rgba(0, 0, 0, 0.2), 0 12px 40px 40px rgba(0, 0, 0, 0.19)";
+}

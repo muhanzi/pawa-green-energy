@@ -33,6 +33,7 @@ import crs from "../pictures/crs.jpg";
 import sab from "../pictures/sab.jpg";
 import GoogleFontNavItem from "./subcomponents/fonts/googleFontForNavItems";
 import "./subcomponents/styles/myCalculator_styles.css";
+import "./subcomponents/styles/image_styles.css";
 import projectStyles from "./subcomponents/styles/Styles";
 import eeau from "../pictures/energy efficie cy association of uganda.png";
 import unreeea from "../pictures/unreeea.png";
@@ -41,6 +42,7 @@ import gabrial from "../pictures/gabriel sustainable solutions.PNG";
 import aotconsulting from "../pictures/aotconsulting.png";
 import poweroneforone from "../pictures/poweroneforone.png";
 import aream from "../pictures/aream.webp";
+import videofile from "../pictures/music.mp4";
 
 class Home extends Component {
   constructor(props) {
@@ -407,6 +409,59 @@ class Home extends Component {
     { picture: aream, link: "https://www.aream.de/" }
   ];
 
+  check_width = () => {
+    if (window.screen.availWidth < 500) {
+      return "100%"; // for small platforms (phones)
+    } else {
+      return 400; // for big platforms (computers,ipads,...)
+    }
+  };
+
+  blog_data = [
+    {
+      type: "picture",
+      file: image3,
+      description:
+        "okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrewjherjhw jhjhewhr nejhrhjr okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrew jherjhw jhjhewhr nejhrhjr"
+    },
+    {
+      type: "video",
+      file: videofile,
+      description:
+        "okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrewjherjhw jhjhewhr nejhrhjr okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrew jherjhw jhjhewhr nejhrhjr"
+    }
+  ];
+
+  blog_data2 = [
+    {
+      type: "picture",
+      file: image3,
+      description:
+        "okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrewjherjhw jhjhewhr nejhrhjr okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrew jherjhw jhjhewhr nejhrhjr"
+    },
+    {
+      type: "picture",
+      file: image3,
+      description:
+        "okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrewjherjhw jhjhewhr nejhrhjr okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrew jherjhw jhjhewhr nejhrhjr"
+    }
+  ];
+
+  blog_data3 = [
+    {
+      type: "video",
+      file: videofile,
+      description:
+        "okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrewjherjhw jhjhewhr nejhrhjr okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrew jherjhw jhjhewhr nejhrhjr"
+    },
+    {
+      type: "video",
+      file: videofile,
+      description:
+        "okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrewjherjhw jhjhewhr nejhrhjr okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrew jherjhw jhjhewhr nejhrhjr"
+    }
+  ];
+
   render() {
     return (
       <div
@@ -560,7 +615,114 @@ class Home extends Component {
               />
             </span>
           </Row>
-          <Row></Row>
+          {this.blog_data2.map(post => {
+            if (post.type === "picture") {
+              return (
+                <Row
+                  style={
+                    {
+                      // border: "1px solid red"
+                    }
+                  }
+                >
+                  <Col
+                    dm={5}
+                    style={{
+                      minHeight: 300,
+                      Width: 400,
+                      paddingTop: 25,
+                      paddingBottom: 25,
+                      // border: "1px solid green",
+                      textAlign: "center"
+                    }}
+                  >
+                    <Image
+                      fluid
+                      src={post.file}
+                      style={{
+                        height: "300px",
+                        width: "400px",
+                        boxShadow:
+                          "0 8px 16px 16px rgba(0, 0, 0, 0.2), 0 12px 40px 40px rgba(0, 0, 0, 0.19)"
+                      }}
+                    />
+                  </Col>
+                  <Col
+                    lg={7}
+                    style={{
+                      minHeight: 100,
+                      Width: 400,
+                      margin: "0 auto",
+                      paddingTop: 25,
+                      paddingBottom: 25,
+                      paddingRight: 60,
+                      fontSize: 20
+                      // border: "1px solid green"
+                    }}
+                  >
+                    <GoogleFontNavItem
+                      text={post.description}
+                      fontfamily={"tangerine"}
+                    />
+                  </Col>
+                </Row>
+              );
+            } else if (post.type === "video") {
+              return (
+                <Row
+                  style={
+                    {
+                      // border: "1px solid red"
+                    }
+                  }
+                >
+                  <Col
+                    dm={5}
+                    style={{
+                      minHeight: 300,
+                      Width: 400,
+                      paddingTop: 25,
+                      paddingBottom: 25,
+                      // border: "1px solid green",
+                      textAlign: "center"
+                    }}
+                  >
+                    <video
+                      controls
+                      src={post.file}
+                      style={{
+                        height: 300,
+                        width: this.check_width(),
+                        border: 0,
+                        boxShadow:
+                          "0 8px 16px 16px rgba(0, 0, 0, 0.2), 0 12px 40px 40px rgba(0, 0, 0, 0.19)"
+                      }}
+                    />
+                  </Col>
+                  <Col
+                    lg={7}
+                    style={{
+                      minHeight: 100,
+                      Width: 400,
+                      margin: "0 auto",
+                      paddingTop: 25,
+                      paddingBottom: 25,
+                      paddingRight: 60,
+                      fontSize: 20
+                      // border: "1px solid green"
+                    }}
+                  >
+                    <GoogleFontNavItem
+                      text={post.description}
+                      fontfamily={"tangerine"}
+                    />
+                  </Col>
+                </Row>
+              );
+            } else {
+              return "";
+            }
+          })}
           <Row></Row>
         </Container>
         {/* popup window for energy calculator */}
