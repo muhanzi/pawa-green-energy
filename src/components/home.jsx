@@ -43,6 +43,7 @@ import aotconsulting from "../pictures/aotconsulting.png";
 import poweroneforone from "../pictures/poweroneforone.png";
 import aream from "../pictures/aream.webp";
 import videofile from "../pictures/music.mp4";
+import firebase from "../firebase.js";
 
 class Home extends Component {
   constructor(props) {
@@ -62,9 +63,68 @@ class Home extends Component {
       hours_per_day_error: "0px",
       days_per_week_error: "0px",
       weeks_per_month_error: "0px",
-      total_units: "00"
+      total_units: "00",
+      blog_data: []
     };
   }
+
+  componentDidMount() {
+    this.retrieveFromFirestore();
+  }
+
+  retrieveFromFirestore = () => {
+    firebase
+      .firestore()
+      .collection("blog")
+      .onSnapshot(snapshot => {
+        const blog = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        this.setState({ blog_data: blog });
+        this.retrieveFromStorage();
+      });
+  };
+
+  fileURLs = [];
+
+  retrieveFromStorage = () => {
+    const blogData = [];
+    this.state.blog_data.forEach(post => {
+      const url = firebase
+        .storage()
+        .ref()
+        .child(`/blog/${post.file}`)
+        .getDownloadURL();
+      blogData.push({
+        type: post.type,
+        description: post.description,
+        file: url
+      });
+    });
+    this.setState({ blog_data: blogData }); // after getting the actual reference to files in the firebase storage
+  };
+
+  retrieveFromStorage2 = () => {
+    const blogData = [];
+    this.state.blog_data.forEach(post => {
+      let urlRef = "";
+      firebase
+        .storage()
+        .ref()
+        .child(`/blog/${post.file}`)
+        .getDownloadURL()
+        .then(url => {
+          urlRef = url;
+        });
+      blogData.push({
+        type: post.type,
+        description: post.description,
+        file: urlRef
+      });
+    });
+    this.setState({ blog_data: blogData }); // after getting the actual reference to files in the firebase storage
+  };
 
   calculator_col_style = {
     borderRight: "1px solid #eee",
@@ -417,51 +477,6 @@ class Home extends Component {
     }
   };
 
-  blog_data = [
-    {
-      type: "picture",
-      file: image3,
-      description:
-        "okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrewjherjhw jhjhewhr nejhrhjr okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrew jherjhw jhjhewhr nejhrhjr"
-    },
-    {
-      type: "video",
-      file: videofile,
-      description:
-        "okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrewjherjhw jhjhewhr nejhrhjr okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrew jherjhw jhjhewhr nejhrhjr"
-    }
-  ];
-
-  blog_data2 = [
-    {
-      type: "picture",
-      file: image3,
-      description:
-        "okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrewjherjhw jhjhewhr nejhrhjr okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrew jherjhw jhjhewhr nejhrhjr"
-    },
-    {
-      type: "picture",
-      file: image3,
-      description:
-        "okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrewjherjhw jhjhewhr nejhrhjr okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrew jherjhw jhjhewhr nejhrhjr"
-    }
-  ];
-
-  blog_data3 = [
-    {
-      type: "video",
-      file: videofile,
-      description:
-        "okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrewjherjhw jhjhewhr nejhrhjr okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrew jherjhw jhjhewhr nejhrhjr"
-    },
-    {
-      type: "video",
-      file: videofile,
-      description:
-        "okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrewjherjhw jhjhewhr nejhrhjr okay okay ushudhe weiurhiue uhfuef uhuifbre huhuwf uyruwe yeryuwe yeryuwe uuwefe uyery yeuwr herjjrw herf uruewyu heruw hejrew jherjhw jhjhewhr nejhrhjr"
-    }
-  ];
-
   render() {
     return (
       <div
@@ -615,7 +630,8 @@ class Home extends Component {
               />
             </span>
           </Row>
-          {this.blog_data2.map(post => {
+          {this.state.blog_data.map(post => {
+            console.log(post.file);
             if (post.type === "picture") {
               return (
                 <Row
@@ -698,6 +714,20 @@ class Home extends Component {
                           "0 8px 16px 16px rgba(0, 0, 0, 0.2), 0 12px 40px 40px rgba(0, 0, 0, 0.19)"
                       }}
                     />
+                    {/* <iframe
+                      title="video"
+                      style={{
+                        height: 300,
+                        width: this.check_width(),
+                        border: 0,
+                        boxShadow:
+                          "0 8px 16px 16px rgba(0, 0, 0, 0.2), 0 12px 40px 40px rgba(0, 0, 0, 0.19)"
+                      }}
+                      src="https://www.youtube.com/embed/rT4qAILCguM"
+                      frameborder="0"
+                      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen
+                    ></iframe> */}
                   </Col>
                   <Col
                     lg={7}
