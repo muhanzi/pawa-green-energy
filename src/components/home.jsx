@@ -634,13 +634,7 @@ class Home extends Component {
             console.log(post.file);
             if (post.type === "picture") {
               return (
-                <Row
-                  style={
-                    {
-                      // border: "1px solid red"
-                    }
-                  }
-                >
+                <Row>
                   <Col
                     dm={5}
                     style={{
@@ -648,7 +642,6 @@ class Home extends Component {
                       Width: 400,
                       paddingTop: 25,
                       paddingBottom: 25,
-                      // border: "1px solid green",
                       textAlign: "center",
                     }}
                   >
@@ -674,7 +667,6 @@ class Home extends Component {
                       paddingBottom: 25,
                       paddingRight: 60,
                       fontSize: 20,
-                      // border: "1px solid green"
                     }}
                   >
                     <GoogleFontNavItem
@@ -686,13 +678,7 @@ class Home extends Component {
               );
             } else if (post.type === "video") {
               return (
-                <Row
-                  style={
-                    {
-                      // border: "1px solid red"
-                    }
-                  }
-                >
+                <Row>
                   <Col
                     dm={5}
                     style={{
@@ -700,7 +686,6 @@ class Home extends Component {
                       Width: 400,
                       paddingTop: 25,
                       paddingBottom: 25,
-                      // border: "1px solid green",
                       textAlign: "center",
                     }}
                   >
@@ -727,7 +712,6 @@ class Home extends Component {
                       paddingBottom: 25,
                       paddingRight: 60,
                       fontSize: 20,
-                      // border: "1px solid green"
                     }}
                   >
                     <GoogleFontNavItem
@@ -740,13 +724,7 @@ class Home extends Component {
             } else if (post.type === "youtube") {
               console.log("youtube link: " + post.file);
               return (
-                <Row
-                  style={
-                    {
-                      // border: "1px solid red"
-                    }
-                  }
-                >
+                <Row>
                   <Col
                     dm={5}
                     style={{
@@ -754,7 +732,6 @@ class Home extends Component {
                       Width: 400,
                       paddingTop: 25,
                       paddingBottom: 25,
-                      // border: "1px solid green",
                       textAlign: "center",
                     }}
                   >
@@ -783,7 +760,6 @@ class Home extends Component {
                       paddingBottom: 25,
                       paddingRight: 60,
                       fontSize: 20,
-                      // border: "1px solid green"
                     }}
                   >
                     <GoogleFontNavItem
