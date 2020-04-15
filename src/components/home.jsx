@@ -8,14 +8,14 @@ import {
   Modal,
   Button,
   FormGroup,
-  Image
+  Image,
 } from "react-bootstrap";
 import {
   MDBContainer,
   MDBDataTable,
   MDBBtn,
   MDBTable,
-  MDBTableBody
+  MDBTableBody,
 } from "mdbreact";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
@@ -42,7 +42,6 @@ import gabrial from "../pictures/gabriel sustainable solutions.PNG";
 import aotconsulting from "../pictures/aotconsulting.png";
 import poweroneforone from "../pictures/poweroneforone.png";
 import aream from "../pictures/aream.webp";
-import videofile from "../pictures/music.mp4";
 import firebase from "../firebase.js";
 
 class Home extends Component {
@@ -64,7 +63,7 @@ class Home extends Component {
       days_per_week_error: "0px",
       weeks_per_month_error: "0px",
       total_units: "00",
-      blog_data: []
+      blog_data: [],
     };
   }
 
@@ -76,61 +75,62 @@ class Home extends Component {
     firebase
       .firestore()
       .collection("blog")
-      .onSnapshot(snapshot => {
-        const blog = snapshot.docs.map(doc => ({
+      .onSnapshot((snapshot) => {
+        const blog = snapshot.docs.map((doc) => ({
           id: doc.id,
-          ...doc.data()
+          ...doc.data(),
         }));
         this.setState({ blog_data: blog });
         this.retrieveFromStorage();
       });
   };
 
-  fileURLs = [];
-
   retrieveFromStorage = () => {
-    const blogData = [];
-    this.state.blog_data.forEach(post => {
-      const url = firebase
-        .storage()
-        .ref()
-        .child(`/blog/${post.file}`)
-        .getDownloadURL();
-      blogData.push({
-        type: post.type,
-        description: post.description,
-        file: url
-      });
-    });
-    this.setState({ blog_data: blogData }); // after getting the actual reference to files in the firebase storage
-  };
-
-  retrieveFromStorage2 = () => {
-    const blogData = [];
-    this.state.blog_data.forEach(post => {
-      let urlRef = "";
+    let blog = [];
+    this.state.blog_data.forEach((post) => {
       firebase
         .storage()
         .ref()
         .child(`/blog/${post.file}`)
         .getDownloadURL()
-        .then(url => {
-          urlRef = url;
+        .then((url) => {
+          blog.push({
+            id: post.id,
+            type: post.type,
+            description: post.description,
+            file: url,
+          });
+          this.setState({ blog_data: blog });
+        })
+        .catch((error) => {
+          // in case of error // may be the file wasn't found in the storage
+          if (post.type === "youtube") {
+            // we use the youtube embed link
+            blog.push({
+              id: post.id,
+              type: post.type,
+              description: post.description,
+              file: post.file,
+            });
+            this.setState({ blog_data: blog });
+          } else {
+            blog.push({
+              id: post.id,
+              type: post.type,
+              description: post.description,
+              file: "",
+            });
+            this.setState({ blog_data: blog });
+          }
         });
-      blogData.push({
-        type: post.type,
-        description: post.description,
-        file: urlRef
-      });
     });
-    this.setState({ blog_data: blogData }); // after getting the actual reference to files in the firebase storage
   };
 
   calculator_col_style = {
     borderRight: "1px solid #eee",
     borderBottom: "1px solid #eee",
     minHeight: 80,
-    paddingTop: 25
+    paddingTop: 25,
   };
 
   cards_data = [
@@ -142,7 +142,7 @@ class Home extends Component {
       details: "Solar Photovoltaic System (panels, batteries, inverters, remote controllers monitoring panels, etc.".substring(
         0,
         100
-      )
+      ),
     },
     {
       title: "PGE-SWS",
@@ -152,7 +152,7 @@ class Home extends Component {
       details: "Solar Water Heating System (flat plate, glass tube, & sovaltten)".substring(
         0,
         100
-      )
+      ),
     },
     {
       title: "PGE-SLS",
@@ -162,7 +162,7 @@ class Home extends Component {
       details: "Solar Lighting System (all in one street, compound and garden lights, indoor and outdoor lights)".substring(
         0,
         100
-      )
+      ),
     },
     {
       title: "PGE-CRS",
@@ -172,7 +172,7 @@ class Home extends Component {
       details: "Solar refrigeration & cold chain systems (solar fridges, freezer, cold rooms storage, systems)".substring(
         0,
         100
-      )
+      ),
     },
     {
       title: "PGE-SAB",
@@ -182,7 +182,7 @@ class Home extends Component {
       details: "Solar Agri-Business (solar water pumps, milling machines and dryers)".substring(
         0,
         100
-      )
+      ),
     },
     {
       title: "PGE-SPS",
@@ -192,7 +192,7 @@ class Home extends Component {
       details: "Security & Protection Systems (CCTV cameras, firefighting & alarm systems, lightning protection systems)".substring(
         0,
         100
-      )
+      ),
     },
     {
       title: "PGE-EPE",
@@ -202,7 +202,7 @@ class Home extends Component {
       details: "Electrical tools & personal protection equipment (meters, hand tools, power tools, & personal protection equipment".substring(
         0,
         100
-      )
+      ),
     },
     {
       title: "PGE-ESC",
@@ -212,8 +212,8 @@ class Home extends Component {
       details: "Services (design, installation & maintenance of solar systems, energy metering, energy consultancy services, energy efficiency, training, etc.)".substring(
         0,
         100
-      )
-    }
+      ),
+    },
   ];
 
   select_devices = [
@@ -251,7 +251,7 @@ class Home extends Component {
     { title: "Washing Machine 700w", power: 700 },
     { title: "Water Heater/Geyser 1000w", power: 1000 },
     { title: "Water Heater/Geyser 1500w", power: 1500 },
-    { title: "Water Heater/Geyser 2000w", power: 2000 }
+    { title: "Water Heater/Geyser 2000w", power: 2000 },
   ];
 
   energy_calculator = () => {
@@ -289,12 +289,12 @@ class Home extends Component {
       hours_per_day: 1,
       days_per_week: 1,
       weeks_per_month: 1,
-      total_units: "00"
+      total_units: "00",
     });
   }
-  handle_changed_number_of_devices = event => {
+  handle_changed_number_of_devices = (event) => {
     this.setState({
-      number_of_devices: event.target.value
+      number_of_devices: event.target.value,
     });
     if (event.target.value > 0) {
       this.setState({
@@ -320,17 +320,17 @@ class Home extends Component {
           Number.parseInt(this.state.days_per_week),
           Number.parseInt(this.state.weeks_per_month)
         ),
-        number_of_devices_error: "0px"
+        number_of_devices_error: "0px",
       });
     } else {
       this.setState({
-        number_of_devices_error: "1px solid red"
+        number_of_devices_error: "1px solid red",
       });
     }
   };
-  handle_changed_hours_per_day = event => {
+  handle_changed_hours_per_day = (event) => {
     this.setState({
-      hours_per_day: event.target.value
+      hours_per_day: event.target.value,
     }); // first change the value of the input the check if it passes the condition
     if (event.target.value > 0 && event.target.value <= 24) {
       this.setState({
@@ -356,17 +356,17 @@ class Home extends Component {
           this.state.devicePowerWatts,
           Number.parseInt(this.state.number_of_devices)
         ),
-        hours_per_day_error: "0px"
+        hours_per_day_error: "0px",
       });
     } else {
       this.setState({
-        hours_per_day_error: "1px solid red"
+        hours_per_day_error: "1px solid red",
       });
     }
   };
-  handle_changed_days_per_week = event => {
+  handle_changed_days_per_week = (event) => {
     this.setState({
-      days_per_week: event.target.value
+      days_per_week: event.target.value,
     });
     if (event.target.value > 0 && event.target.value <= 7) {
       this.setState({
@@ -392,17 +392,17 @@ class Home extends Component {
           this.state.devicePowerWatts,
           Number.parseInt(this.state.number_of_devices)
         ),
-        days_per_week_error: "0px"
+        days_per_week_error: "0px",
       });
     } else {
       this.setState({
-        days_per_week_error: "1px solid red"
+        days_per_week_error: "1px solid red",
       });
     }
   };
-  handle_changed_weeks_per_month = event => {
+  handle_changed_weeks_per_month = (event) => {
     this.setState({
-      weeks_per_month: event.target.value
+      weeks_per_month: event.target.value,
     });
     if (event.target.value > 0 && event.target.value <= 4) {
       this.setState({
@@ -428,11 +428,11 @@ class Home extends Component {
           this.state.devicePowerWatts,
           Number.parseInt(this.state.number_of_devices)
         ),
-        weeks_per_month_error: "0px"
+        weeks_per_month_error: "0px",
       });
     } else {
       this.setState({
-        weeks_per_month_error: "1px solid red"
+        weeks_per_month_error: "1px solid red",
       });
     }
   };
@@ -466,7 +466,7 @@ class Home extends Component {
     { picture: gabrial, link: "#" },
     { picture: aotconsulting, link: "https://www.aotconsulting.co.ug/" },
     { picture: poweroneforone, link: "http://poweroneforone.de/" },
-    { picture: aream, link: "https://www.aream.de/" }
+    { picture: aream, link: "https://www.aream.de/" },
   ];
 
   check_width = () => {
@@ -482,7 +482,7 @@ class Home extends Component {
       <div
         style={{
           minHeight: 800,
-          backgroundColor: project().home_component_background_color
+          backgroundColor: project().home_component_background_color,
         }}
       >
         <Slider />
@@ -492,7 +492,7 @@ class Home extends Component {
               style={{
                 margin: "auto",
                 fontSize: 30,
-                fontWeight: "bold"
+                fontWeight: "bold",
               }}
             >
               <GoogleFontNavItem
@@ -502,12 +502,12 @@ class Home extends Component {
             </span>
           </Row>
           <Row>
-            {this.cards_data.map(data => {
+            {this.cards_data.map((data) => {
               return (
                 <Col
                   dm={3}
                   style={{
-                    paddingBottom: 20
+                    paddingBottom: 20,
                   }}
                 >
                   <Card data={data} />
@@ -520,7 +520,7 @@ class Home extends Component {
               style={{
                 margin: "auto",
                 fontSize: 30,
-                fontWeight: "bold"
+                fontWeight: "bold",
               }}
             >
               <GoogleFontNavItem
@@ -533,7 +533,7 @@ class Home extends Component {
             style={{
               textAlign: "center",
               minHeight: 80,
-              color: "white"
+              color: "white",
             }}
           >
             <Col
@@ -582,7 +582,7 @@ class Home extends Component {
               style={{
                 margin: "auto",
                 fontSize: 30,
-                fontWeight: "bold"
+                fontWeight: "bold",
               }}
             >
               <GoogleFontNavItem text={"Our Partners"} fontfamily={"labelle"} />
@@ -591,16 +591,16 @@ class Home extends Component {
           <Row
             style={{
               backgroundColor: "white",
-              minHeight: 120
+              minHeight: 120,
             }}
           >
-            {this.our_partners.map(data => {
+            {this.our_partners.map((data) => {
               return (
                 <Col
                   dm={3}
                   style={{
                     margin: "auto",
-                    textAlign: "center"
+                    textAlign: "center",
                   }}
                 >
                   <a href={data.link}>
@@ -608,7 +608,7 @@ class Home extends Component {
                       src={data.picture}
                       style={{
                         height: 80,
-                        width: 110
+                        width: 110,
                       }}
                     />
                   </a>
@@ -621,7 +621,7 @@ class Home extends Component {
               style={{
                 margin: "auto",
                 fontSize: 30,
-                fontWeight: "bold"
+                fontWeight: "bold",
               }}
             >
               <GoogleFontNavItem
@@ -630,7 +630,7 @@ class Home extends Component {
               />
             </span>
           </Row>
-          {this.state.blog_data.map(post => {
+          {this.state.blog_data.map((post) => {
             console.log(post.file);
             if (post.type === "picture") {
               return (
@@ -649,17 +649,18 @@ class Home extends Component {
                       paddingTop: 25,
                       paddingBottom: 25,
                       // border: "1px solid green",
-                      textAlign: "center"
+                      textAlign: "center",
                     }}
                   >
                     <Image
                       fluid
                       src={post.file}
+                      alt="Image Loading..."
                       style={{
                         height: "300px",
                         width: "400px",
                         boxShadow:
-                          "0 8px 16px 16px rgba(0, 0, 0, 0.2), 0 12px 40px 40px rgba(0, 0, 0, 0.19)"
+                          "0 8px 16px 16px rgba(0, 0, 0, 0.2), 0 12px 40px 40px rgba(0, 0, 0, 0.19)",
                       }}
                     />
                   </Col>
@@ -672,7 +673,7 @@ class Home extends Component {
                       paddingTop: 25,
                       paddingBottom: 25,
                       paddingRight: 60,
-                      fontSize: 20
+                      fontSize: 20,
                       // border: "1px solid green"
                     }}
                   >
@@ -700,34 +701,21 @@ class Home extends Component {
                       paddingTop: 25,
                       paddingBottom: 25,
                       // border: "1px solid green",
-                      textAlign: "center"
+                      textAlign: "center",
                     }}
                   >
                     <video
                       controls
                       src={post.file}
+                      alt="Video Loading..."
                       style={{
                         height: 300,
                         width: this.check_width(),
                         border: 0,
                         boxShadow:
-                          "0 8px 16px 16px rgba(0, 0, 0, 0.2), 0 12px 40px 40px rgba(0, 0, 0, 0.19)"
+                          "0 8px 16px 16px rgba(0, 0, 0, 0.2), 0 12px 40px 40px rgba(0, 0, 0, 0.19)",
                       }}
                     />
-                    {/* <iframe
-                      title="video"
-                      style={{
-                        height: 300,
-                        width: this.check_width(),
-                        border: 0,
-                        boxShadow:
-                          "0 8px 16px 16px rgba(0, 0, 0, 0.2), 0 12px 40px 40px rgba(0, 0, 0, 0.19)"
-                      }}
-                      src="https://www.youtube.com/embed/rT4qAILCguM"
-                      frameborder="0"
-                      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                      allowfullscreen
-                    ></iframe> */}
                   </Col>
                   <Col
                     lg={7}
@@ -738,7 +726,63 @@ class Home extends Component {
                       paddingTop: 25,
                       paddingBottom: 25,
                       paddingRight: 60,
-                      fontSize: 20
+                      fontSize: 20,
+                      // border: "1px solid green"
+                    }}
+                  >
+                    <GoogleFontNavItem
+                      text={post.description}
+                      fontfamily={"tangerine"}
+                    />
+                  </Col>
+                </Row>
+              );
+            } else if (post.type === "youtube") {
+              console.log("youtube link: " + post.file);
+              return (
+                <Row
+                  style={
+                    {
+                      // border: "1px solid red"
+                    }
+                  }
+                >
+                  <Col
+                    dm={5}
+                    style={{
+                      minHeight: 300,
+                      Width: 400,
+                      paddingTop: 25,
+                      paddingBottom: 25,
+                      // border: "1px solid green",
+                      textAlign: "center",
+                    }}
+                  >
+                    <iframe
+                      title="video" // unique title
+                      src={post.file}
+                      style={{
+                        height: 300,
+                        width: this.check_width(),
+                        border: 0,
+                        boxShadow:
+                          "0 8px 16px 16px rgba(0, 0, 0, 0.2), 0 12px 40px 40px rgba(0, 0, 0, 0.19)",
+                      }}
+                      frameborder="0"
+                      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen
+                    ></iframe>
+                  </Col>
+                  <Col
+                    lg={7}
+                    style={{
+                      minHeight: 100,
+                      Width: 400,
+                      margin: "0 auto",
+                      paddingTop: 25,
+                      paddingBottom: 25,
+                      paddingRight: 60,
+                      fontSize: 20,
                       // border: "1px solid green"
                     }}
                   >
@@ -784,16 +828,16 @@ class Home extends Component {
                         <Autocomplete
                           id="select"
                           options={this.select_devices}
-                          getOptionLabel={option => option.title} // is like a forEach to fill the select tag options
+                          getOptionLabel={(option) => option.title} // is like a forEach to fill the select tag options
                           onChange={(event, value) => {
                             //console.log(value); // an object with title and power values
                             this.device_selected(value.power);
                           }}
                           style={{
-                            width: 175
+                            width: 175,
                           }}
                           size="small"
-                          renderInput={params => (
+                          renderInput={(params) => (
                             <TextField
                               {...params}
                               label="Device"
@@ -817,7 +861,7 @@ class Home extends Component {
                               fontSize: 15,
                               fontFamilly: "sans-serif",
                               border: this.state.number_of_devices_error,
-                              borderRadius: "5px"
+                              borderRadius: "5px",
                             }}
                           />
                         </FormGroup>
@@ -851,7 +895,7 @@ class Home extends Component {
                               fontSize: 15,
                               fontFamilly: "sans-serif",
                               border: this.state.hours_per_day_error,
-                              borderRadius: "5px"
+                              borderRadius: "5px",
                             }}
                           />
                         </FormGroup>
@@ -885,7 +929,7 @@ class Home extends Component {
                               fontSize: 15,
                               fontFamilly: "sans-serif",
                               border: this.state.days_per_week_error,
-                              borderRadius: "5px"
+                              borderRadius: "5px",
                             }}
                           />
                         </FormGroup>
@@ -903,7 +947,7 @@ class Home extends Component {
                             onBlur=""
                             style={{
                               fontSize: 15,
-                              fontFamilly: "sans-serif"
+                              fontFamilly: "sans-serif",
                             }}
                           />
                         </FormGroup>
@@ -922,7 +966,7 @@ class Home extends Component {
                               fontSize: 15,
                               fontFamilly: "sans-serif",
                               border: this.state.weeks_per_month_error,
-                              borderRadius: "5px"
+                              borderRadius: "5px",
                             }}
                           />
                         </FormGroup>
@@ -934,7 +978,7 @@ class Home extends Component {
                           textAlign: "center",
                           color: project().projectColor,
                           fontWeight: "bolder",
-                          fontSize: 28
+                          fontSize: 28,
                         }}
                       >
                         <span>

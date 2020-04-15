@@ -1,4 +1,9 @@
 // actions
+export const url_reference = url => {
+  return { type: "URL_REFERENCE", payload: url };
+};
+
+// not used
 export const navbar_selection_key1 = () => {
   return { type: "KEY1_SELECTED" };
 };
