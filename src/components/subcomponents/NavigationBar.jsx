@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   navbar_selection_key1,
   navbar_selection_key2,
-  navbar_selection_key3
+  navbar_selection_key3,
 } from "../../actions";
 import ContactBar from "./contactBar";
 import styled from "styled-components";
@@ -17,15 +17,15 @@ function Navigation() {
   const [activeNavLink, setActiveNavLink] = useState("");
   const [nav_Items_style, setNav_Items_style] = useState({
     color: project().projectColor,
-    fontWeight: "bold"
+    fontWeight: "bold",
   });
 
   // current value in the store //
-  const key_selected = useSelector(state => state.navbar); // check in the /reducers/index.js
+  const key_selected = useSelector((state) => state.navbar); // check in the /reducers/index.js
   //
   const dispatch = useDispatch(); // but we can also use "useDispatch()" directly
 
-  const handleSelection = key => {
+  const handleSelection = (key) => {
     switch (key) {
       case "key1":
         dispatch(navbar_selection_key1()); // do this action // tells the reducer which action to perform
@@ -63,7 +63,7 @@ function Navigation() {
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     height: 70,
-    width: 70
+    width: 70,
   };
 
   return (
@@ -86,7 +86,7 @@ function Navigation() {
                       color: "black",
                       fontWeight: "bold",
                       fontSize: 20,
-                      textShadow: "4px 4px 4px #aaa"
+                      textShadow: "4px 4px 4px #aaa",
                     }}
                   >
                     <GoogleFont
@@ -100,7 +100,7 @@ function Navigation() {
                     style={{
                       fontSize: 13,
                       textShadow: "4px 4px 4px #aaa",
-                      color: "black"
+                      color: "black",
                     }}
                   >
                     <i>
@@ -118,7 +118,7 @@ function Navigation() {
         <Navbar.Toggle
           aria-controls="responsive-navbar-nav"
           style={{
-            backgroundColor: project().projectColor
+            backgroundColor: project().projectColor,
           }}
         />
         <Navbar.Collapse

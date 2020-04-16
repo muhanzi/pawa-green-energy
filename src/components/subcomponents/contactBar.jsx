@@ -9,7 +9,7 @@ function ContactBar() {
         <Row
           style={{
             backgroundColor: project().projectColor,
-            color: "white"
+            color: "white",
           }}
         >
           <Col dm={4} style={{ minHeight: 30 }}>

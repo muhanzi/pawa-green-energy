@@ -64,11 +64,13 @@ class Home extends Component {
       weeks_per_month_error: "0px",
       total_units: "00",
       blog_data: [],
+      is_small_device: false,
     };
   }
 
   componentDidMount() {
     this.retrieveFromFirestore();
+    this.check_width();
   }
 
   retrieveFromFirestore = () => {
@@ -471,6 +473,7 @@ class Home extends Component {
 
   check_width = () => {
     if (window.screen.availWidth < 500) {
+      this.setState({ is_small_device: true });
       return "100%"; // for small platforms (phones)
     } else {
       return 400; // for big platforms (computers,ipads,...)
@@ -486,7 +489,7 @@ class Home extends Component {
         }}
       >
         <Slider />
-        <Container style={{ paddingBottom: 20, paddingTop: 10 }} fluid>
+        <Container style={{ paddingTop: 10 }} fluid>
           <Row style={{ paddingBottom: 30 }}>
             <span
               style={{
@@ -773,7 +776,118 @@ class Home extends Component {
               return "";
             }
           })}
-          <Row></Row>
+          <Row
+            style={{
+              minHeight: 100,
+              color: "white",
+              backgroundColor: project().projectColor,
+              paddingTop: 20,
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingBottom: 5,
+            }}
+            hidden={this.state.is_small_device}
+          >
+            <Col
+              dm={3}
+              style={{
+                margin: "auto",
+                textAlign: "center",
+                marginBottom: 15,
+              }}
+            >
+              <Row style={{ marginBottom: 15 }}>Contact us</Row>
+              <Row>PawaGreen Energy Ltd, Arua Uganda </Row>
+              <Row>info@pawagreenenergy.com</Row>
+              <Row>TIN: 1014728519</Row>
+              <Row>+256773218545</Row>
+              {/* whatsapp & phone call icon */}
+            </Col>
+            <Col
+              dm={3}
+              style={{
+                margin: "auto",
+                textAlign: "center",
+                marginBottom: 15,
+              }}
+            >
+              <Row style={{ marginBottom: 15 }}>Follow us</Row>
+              <Row>linked in</Row>
+              <Row>facebook</Row>
+              <Row>twitter</Row>
+              <Row>Instagram</Row>
+            </Col>
+            <Col
+              dm={3}
+              style={{
+                margin: "auto",
+                textAlign: "center",
+                marginBottom: 15,
+              }}
+            >
+              <Row style={{ marginBottom: 15 }}>Services</Row>
+              <Row>PGE-SPV</Row>
+              <Row>PGE-SWS</Row>
+              <Row>PGE-SLS</Row>
+              <Row>PGE-CRS</Row>
+            </Col>
+            <Col
+              dm={3}
+              style={{
+                margin: "auto",
+                textAlign: "center",
+                marginBottom: 15,
+              }}
+            >
+              <Row style={{ marginBottom: 15 }}></Row>
+              <Row>PGE-SAB</Row>
+              <Row>PGE-SPS</Row>
+              <Row>PGE-EPE</Row>
+              <Row>PGE-ESC</Row>
+            </Col>
+          </Row>
+        </Container>
+        {/* /////////for small devices only///////////// */}
+        <Container
+          hidden={!this.state.is_small_device}
+          style={{
+            minHeight: 100,
+            color: "white",
+            backgroundColor: project().projectColor,
+            paddingTop: 20,
+            paddingLeft: 20,
+            paddingRight: 20,
+          }}
+          fluid
+        >
+          <div
+            dm={3}
+            style={{
+              margin: "auto",
+              textAlign: "left",
+              marginBottom: 15,
+            }}
+          >
+            <div style={{ marginBottom: 15 }}>Follow us</div>
+            <div>linked in</div>
+            <div>facebook</div>
+            <div>twitter</div>
+            <div>Instagram</div>
+          </div>
+          <div
+            dm={3}
+            style={{
+              margin: "auto",
+              textAlign: "left",
+            }}
+          >
+            <div style={{ marginBottom: 15 }}>Contact us</div>
+            <div>PawaGreen Energy Ltd, Arua Uganda </div>
+            <div>info@pawagreenenergy.com</div>
+            <div>TIN: 1014728519</div>
+            <div>+256773218545</div>
+            {/* whatsapp & phone call icon */}
+          </div>
         </Container>
         {/* popup window for energy calculator */}
         <Modal
