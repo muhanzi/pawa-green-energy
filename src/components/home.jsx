@@ -43,6 +43,20 @@ import aotconsulting from "../pictures/aotconsulting.png";
 import poweroneforone from "../pictures/poweroneforone.png";
 import aream from "../pictures/aream.webp";
 import firebase from "../firebase.js";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faMapMarkerAlt,
+  faEnvelopeSquare,
+  faPhoneSquare,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  faFacebookSquare,
+  faTwitterSquare,
+  faInstagramSquare,
+  faLinkedin,
+  faWhatsappSquare,
+} from "@fortawesome/free-brands-svg-icons";
 
 class Home extends Component {
   constructor(props) {
@@ -69,8 +83,8 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    this.retrieveFromFirestore();
     this.check_width();
+    this.retrieveFromFirestore();
   }
 
   retrieveFromFirestore = () => {
@@ -779,11 +793,11 @@ class Home extends Component {
           <Row
             style={{
               minHeight: 100,
-              color: "white",
-              backgroundColor: project().projectColor,
+              color: project().projectColor,
+              backgroundColor: "white",
               paddingTop: 20,
-              paddingLeft: 20,
-              paddingRight: 20,
+              paddingLeft: 40,
+              paddingRight: 40,
               paddingBottom: 5,
             }}
             hidden={this.state.is_small_device}
@@ -796,12 +810,75 @@ class Home extends Component {
                 marginBottom: 15,
               }}
             >
-              <Row style={{ marginBottom: 15 }}>Contact us</Row>
-              <Row>PawaGreen Energy Ltd, Arua Uganda </Row>
-              <Row>info@pawagreenenergy.com</Row>
-              <Row>TIN: 1014728519</Row>
-              <Row>+256773218545</Row>
-              {/* whatsapp & phone call icon */}
+              <Row
+                style={{ marginBottom: 15, fontSize: 20, fontWeight: "bold" }}
+              >
+                <GoogleFontNavItem
+                  text={"Contact us"}
+                  fontfamily={"tangerine"}
+                />
+              </Row>
+              <Row>
+                <span>
+                  <FontAwesomeIcon
+                    icon={faMapMarkerAlt}
+                    color={project().projectColor}
+                  />
+                  <span style={{ paddingLeft: 5 }}>
+                    <GoogleFontNavItem
+                      text={"PawaGreen Energy Ltd, Arua Uganda"}
+                      fontfamily={"tangerine"}
+                    />
+                  </span>
+                </span>
+              </Row>
+              <Row>
+                <span>
+                  <a
+                    href="http://gmail.com"
+                    style={{ color: project().projectColor }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faEnvelopeSquare}
+                      color={project().projectColor}
+                    />
+                    <span style={{ paddingLeft: 5 }}>
+                      <GoogleFontNavItem
+                        text={"info@pawagreenenergy.com"}
+                        fontfamily={"tangerine"}
+                      />
+                    </span>
+                  </a>
+                </span>
+              </Row>
+              <Row>
+                <span>
+                  <FontAwesomeIcon
+                    icon={faPhoneSquare}
+                    color={project().projectColor}
+                  />
+                  <span style={{ paddingLeft: 5 }}>
+                    <GoogleFontNavItem
+                      text={"+256773218545"}
+                      fontfamily={"tangerine"}
+                    />
+                  </span>
+                </span>
+              </Row>
+              <Row>
+                <span>
+                  <FontAwesomeIcon
+                    icon={faWhatsappSquare}
+                    color={project().projectColor}
+                  />
+                  <span style={{ paddingLeft: 5 }}>
+                    <GoogleFontNavItem
+                      text={"+256773218545"}
+                      fontfamily={"tangerine"}
+                    />
+                  </span>
+                </span>
+              </Row>
             </Col>
             <Col
               dm={3}
@@ -811,11 +888,90 @@ class Home extends Component {
                 marginBottom: 15,
               }}
             >
-              <Row style={{ marginBottom: 15 }}>Follow us</Row>
-              <Row>linked in</Row>
-              <Row>facebook</Row>
-              <Row>twitter</Row>
-              <Row>Instagram</Row>
+              <Row
+                style={{ marginBottom: 15, fontSize: 20, fontWeight: "bold" }}
+              >
+                <GoogleFontNavItem
+                  text={"Follow us"}
+                  fontfamily={"tangerine"}
+                />
+              </Row>
+              <Row>
+                <span>
+                  <a
+                    href="https://www.linkedin.com/in/pawagreen-energy-30a68919b/"
+                    style={{ color: project().projectColor }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faLinkedin}
+                      color={project().projectColor}
+                    />
+                    <span style={{ paddingLeft: 5 }}>
+                      <GoogleFontNavItem
+                        text={"linked in"}
+                        fontfamily={"tangerine"}
+                      />
+                    </span>
+                  </a>
+                </span>
+              </Row>
+              <Row>
+                <span>
+                  <a
+                    href="https://web.facebook.com/PawaGreen-energy-334338817396790/"
+                    style={{ color: project().projectColor }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faFacebookSquare}
+                      color={project().projectColor}
+                    />
+                    <span style={{ paddingLeft: 5 }}>
+                      <GoogleFontNavItem
+                        text={"facebook"}
+                        fontfamily={"tangerine"}
+                      />
+                    </span>
+                  </a>
+                </span>
+              </Row>
+              <Row>
+                <span>
+                  <a
+                    href="https://twitter.com/PawaGreenEnerg1"
+                    style={{ color: project().projectColor }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faTwitterSquare}
+                      color={project().projectColor}
+                    />
+                    <span style={{ paddingLeft: 5 }}>
+                      <GoogleFontNavItem
+                        text={"twitter"}
+                        fontfamily={"tangerine"}
+                      />
+                    </span>
+                  </a>
+                </span>
+              </Row>
+              <Row>
+                <span>
+                  <a
+                    href="https://www.instagram.com/pawagreen_energy/?hl=en"
+                    style={{ color: project().projectColor }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faInstagramSquare}
+                      color={project().projectColor}
+                    />
+                    <span style={{ paddingLeft: 5 }}>
+                      <GoogleFontNavItem
+                        text={"instagram"}
+                        fontfamily={"tangerine"}
+                      />
+                    </span>
+                  </a>
+                </span>
+              </Row>
             </Col>
             <Col
               dm={3}
@@ -825,11 +981,23 @@ class Home extends Component {
                 marginBottom: 15,
               }}
             >
-              <Row style={{ marginBottom: 15 }}>Services</Row>
-              <Row>PGE-SPV</Row>
-              <Row>PGE-SWS</Row>
-              <Row>PGE-SLS</Row>
-              <Row>PGE-CRS</Row>
+              <Row
+                style={{ marginBottom: 15, fontSize: 20, fontWeight: "bold" }}
+              >
+                <GoogleFontNavItem text={"Services"} fontfamily={"tangerine"} />
+              </Row>
+              <Row>
+                <GoogleFontNavItem text={"PGE-SPV"} fontfamily={"tangerine"} />
+              </Row>
+              <Row>
+                <GoogleFontNavItem text={"PGE-SWS"} fontfamily={"tangerine"} />
+              </Row>
+              <Row>
+                <GoogleFontNavItem text={"PGE-SLS"} fontfamily={"tangerine"} />
+              </Row>
+              <Row>
+                <GoogleFontNavItem text={"PGE-CRS"} fontfamily={"tangerine"} />
+              </Row>
             </Col>
             <Col
               dm={3}
@@ -840,10 +1008,18 @@ class Home extends Component {
               }}
             >
               <Row style={{ marginBottom: 15 }}></Row>
-              <Row>PGE-SAB</Row>
-              <Row>PGE-SPS</Row>
-              <Row>PGE-EPE</Row>
-              <Row>PGE-ESC</Row>
+              <Row>
+                <GoogleFontNavItem text={"PGE-SAB"} fontfamily={"tangerine"} />
+              </Row>
+              <Row>
+                <GoogleFontNavItem text={"PGE-SPS"} fontfamily={"tangerine"} />
+              </Row>
+              <Row>
+                <GoogleFontNavItem text={"PGE-EPE"} fontfamily={"tangerine"} />
+              </Row>
+              <Row>
+                <GoogleFontNavItem text={"PGE-ESC"} fontfamily={"tangerine"} />
+              </Row>
             </Col>
           </Row>
         </Container>
@@ -852,11 +1028,12 @@ class Home extends Component {
           hidden={!this.state.is_small_device}
           style={{
             minHeight: 100,
-            color: "white",
-            backgroundColor: project().projectColor,
+            color: project().projectColor,
+            backgroundColor: "white",
             paddingTop: 20,
-            paddingLeft: 20,
-            paddingRight: 20,
+            paddingLeft: 40,
+            paddingRight: 40,
+            paddingBottom: 10,
           }}
           fluid
         >
@@ -868,11 +1045,85 @@ class Home extends Component {
               marginBottom: 15,
             }}
           >
-            <div style={{ marginBottom: 15 }}>Follow us</div>
-            <div>linked in</div>
-            <div>facebook</div>
-            <div>twitter</div>
-            <div>Instagram</div>
+            <div style={{ marginBottom: 15, fontSize: 20, fontWeight: "bold" }}>
+              <GoogleFontNavItem text={"Follow us"} fontfamily={"tangerine"} />
+            </div>
+            <div>
+              <span>
+                <a
+                  href="https://www.linkedin.com/in/pawagreen-energy-30a68919b/"
+                  style={{ color: project().projectColor }}
+                >
+                  <FontAwesomeIcon
+                    icon={faLinkedin}
+                    color={project().projectColor}
+                  />
+                  <span style={{ paddingLeft: 5 }}>
+                    <GoogleFontNavItem
+                      text={"linked in"}
+                      fontfamily={"tangerine"}
+                    />
+                  </span>
+                </a>
+              </span>
+            </div>
+            <div>
+              <span>
+                <a
+                  href="https://web.facebook.com/PawaGreen-energy-334338817396790/"
+                  style={{ color: project().projectColor }}
+                >
+                  <FontAwesomeIcon
+                    icon={faFacebookSquare}
+                    color={project().projectColor}
+                  />
+                  <span style={{ paddingLeft: 5 }}>
+                    <GoogleFontNavItem
+                      text={"facebook"}
+                      fontfamily={"tangerine"}
+                    />
+                  </span>
+                </a>
+              </span>
+            </div>
+            <div>
+              <span>
+                <a
+                  href="https://twitter.com/PawaGreenEnerg1"
+                  style={{ color: project().projectColor }}
+                >
+                  <FontAwesomeIcon
+                    icon={faTwitterSquare}
+                    color={project().projectColor}
+                  />
+                  <span style={{ paddingLeft: 5 }}>
+                    <GoogleFontNavItem
+                      text={"twitter"}
+                      fontfamily={"tangerine"}
+                    />
+                  </span>
+                </a>
+              </span>
+            </div>
+            <div>
+              <span>
+                <a
+                  href="https://www.instagram.com/pawagreen_energy/?hl=en"
+                  style={{ color: project().projectColor }}
+                >
+                  <FontAwesomeIcon
+                    icon={faInstagramSquare}
+                    color={project().projectColor}
+                  />
+                  <span style={{ paddingLeft: 5 }}>
+                    <GoogleFontNavItem
+                      text={"instagram"}
+                      fontfamily={"tangerine"}
+                    />
+                  </span>
+                </a>
+              </span>
+            </div>
           </div>
           <div
             dm={3}
@@ -881,12 +1132,70 @@ class Home extends Component {
               textAlign: "left",
             }}
           >
-            <div style={{ marginBottom: 15 }}>Contact us</div>
-            <div>PawaGreen Energy Ltd, Arua Uganda </div>
-            <div>info@pawagreenenergy.com</div>
-            <div>TIN: 1014728519</div>
-            <div>+256773218545</div>
-            {/* whatsapp & phone call icon */}
+            <div style={{ marginBottom: 15, fontSize: 20, fontWeight: "bold" }}>
+              <GoogleFontNavItem text={"Contact us"} fontfamily={"tangerine"} />
+            </div>
+            <div>
+              <span>
+                <FontAwesomeIcon
+                  icon={faMapMarkerAlt}
+                  color={project().projectColor}
+                />
+                <span style={{ paddingLeft: 5 }}>
+                  <GoogleFontNavItem
+                    text={"PawaGreen Energy Ltd, Arua Uganda"}
+                    fontfamily={"tangerine"}
+                  />
+                </span>
+              </span>
+            </div>
+            <div>
+              <span>
+                <a
+                  href="http://gmail.com"
+                  style={{ color: project().projectColor }}
+                >
+                  <FontAwesomeIcon
+                    icon={faEnvelopeSquare}
+                    color={project().projectColor}
+                  />
+                  <span style={{ paddingLeft: 5 }}>
+                    <GoogleFontNavItem
+                      text={"info@pawagreenenergy.com"}
+                      fontfamily={"tangerine"}
+                    />
+                  </span>
+                </a>
+              </span>
+            </div>
+            <div>
+              <span>
+                <FontAwesomeIcon
+                  icon={faPhoneSquare}
+                  color={project().projectColor}
+                />
+                <span style={{ paddingLeft: 5 }}>
+                  <GoogleFontNavItem
+                    text={"+256773218545"}
+                    fontfamily={"tangerine"}
+                  />
+                </span>
+              </span>
+            </div>
+            <div>
+              <span>
+                <FontAwesomeIcon
+                  icon={faWhatsappSquare}
+                  color={project().projectColor}
+                />
+                <span style={{ paddingLeft: 5 }}>
+                  <GoogleFontNavItem
+                    text={"+256773218545"}
+                    fontfamily={"tangerine"}
+                  />
+                </span>
+              </span>
+            </div>
           </div>
         </Container>
         {/* popup window for energy calculator */}

@@ -11,14 +11,13 @@ const MyFooter = () => {
           minHeight: 80,
           paddingTop: 20,
           color: "white",
-          backgroundColor: project().projectColor
+          backgroundColor: project().projectColor,
         }}
       >
         <MDBContainer fluid>
-          {" " +
-            new Date().getFullYear() +
-            " Copyright: " +
-            project().companyName}
+          {project().companyName + " "}
+          &#169;
+          {" Copyright " + new Date().getFullYear() + ". All rights reserved."}
         </MDBContainer>
       </div>
     </MDBFooter>

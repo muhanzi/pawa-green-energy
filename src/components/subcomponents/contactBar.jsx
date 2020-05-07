@@ -14,10 +14,7 @@ function ContactBar() {
         >
           <Col dm={4} style={{ minHeight: 30 }}>
             Email:{" "}
-            <a
-              href="http://pawagreenenergy@gmail.com"
-              style={{ color: "white" }}
-            >
+            <a href="http://gmail.com" style={{ color: "white" }}>
               info@pawagreenenergy.com
             </a>
           </Col>
@@ -26,6 +23,12 @@ function ContactBar() {
           </Col>
           <Col dm={4} style={{ minHeight: 30 }}>
             TIN: 1014728519
+          </Col>
+          <Col dm={4} style={{ minHeight: 30 }}>
+            Email:{" "}
+            <a href="http://gmail.com" style={{ color: "white" }}>
+              info@pawagreenenergy.com
+            </a>
           </Col>
         </Row>
       </Container>
