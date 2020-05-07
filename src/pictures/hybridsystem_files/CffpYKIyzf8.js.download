@@ -1,0 +1,3 @@
+if (self.CavalryLogger) { CavalryLogger.start_js(["5HxYY"]); }
+
+__d("AdsStaticProductSetUtils",["getDynamicItemSetFieldConfig"],(function(a,b,c,d,e,f){"use strict";a={findIdIndex:function(a,b){return a.findIndex(function(a){return a.type===b.type&&a.id===b.id})},getIdentifierField:function(a){var c=b("getDynamicItemSetFieldConfig")(a);return Object.keys(c).find(function(a){return c[a].isIdentifier})}};e.exports=a}),null);

@@ -1,0 +1,3 @@
+if (self.CavalryLogger) { CavalryLogger.start_js(["RKxSf"]); }
+
+__d("ExternalNotificationOptionHandler",["AsyncDialog","URI"],(function(a,b,c,d,e,f){var g;function a(a,c,d){c=(c=c)!=null?(c=c.client_info)!=null?c.action_type:c:c;if(c==="REPORT_BUG"){c=new(g||(g=b("URI")))("/ajax/bugs/report").setQueryData({client_notifs:d,notif_alert_id:a});b("AsyncDialog").bootstrap(c.toString(),null,"dialog");return!0}return!1}e.exports={tryHandle:a}}),null);

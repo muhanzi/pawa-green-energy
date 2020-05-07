@@ -488,11 +488,18 @@ class Home extends Component {
   check_width = () => {
     if (window.screen.availWidth < 500) {
       this.setState({ is_small_device: true });
+    } else {
+      this.setState({ is_small_device: false });
+    }
+  };
+
+  check_width_size() {
+    if (this.state.is_small_device) {
       return "100%"; // for small platforms (phones)
     } else {
       return 400; // for big platforms (computers,ipads,...)
     }
-  };
+  }
 
   render() {
     return (
@@ -712,7 +719,7 @@ class Home extends Component {
                       alt="Video Loading..."
                       style={{
                         height: 300,
-                        width: this.check_width(),
+                        width: this.check_width_size(),
                         border: 0,
                         boxShadow:
                           "0 8px 16px 16px rgba(0, 0, 0, 0.2), 0 12px 40px 40px rgba(0, 0, 0, 0.19)",
@@ -757,7 +764,7 @@ class Home extends Component {
                       src={post.file}
                       style={{
                         height: 300,
-                        width: this.check_width(),
+                        width: this.check_width_size(),
                         border: 0,
                         boxShadow:
                           "0 8px 16px 16px rgba(0, 0, 0, 0.2), 0 12px 40px 40px rgba(0, 0, 0, 0.19)",

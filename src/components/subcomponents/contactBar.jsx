@@ -24,12 +24,6 @@ function ContactBar() {
           <Col dm={4} style={{ minHeight: 30 }}>
             TIN: 1014728519
           </Col>
-          <Col dm={4} style={{ minHeight: 30 }}>
-            Email:{" "}
-            <a href="http://gmail.com" style={{ color: "white" }}>
-              info@pawagreenenergy.com
-            </a>
-          </Col>
         </Row>
       </Container>
     </div>
