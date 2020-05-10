@@ -150,6 +150,8 @@ function Navigation() {
                 />
               </HoverSpan>
             </Nav.Link>
+            {/* remove /login  because we shall use popup for login and register // it will not be a route */}
+            {/* when user clcicks // we use redux to change the state of the popup to show it // useDispatch() */}
             <Nav.Link href="/login" eventKey="key4">
               <HoverSpan>
                 <GoogleFontNavItem

@@ -19,10 +19,10 @@ function Services() {
     firebase
       .firestore()
       .collection("users")
-      .onSnapshot(snapshot => {
-        const users = snapshot.docs.map(doc => ({
+      .onSnapshot((snapshot) => {
+        const users = snapshot.docs.map((doc) => ({
           id: doc.id,
-          ...doc.data()
+          ...doc.data(),
         })); // ...  --> spread operator will join id with fields inside the document to form a javascript object
         setFirebaseData(users);
       });
@@ -42,7 +42,7 @@ function Services() {
       </button>
       <hr />
       <div>
-        {firebaseData.map(user => {
+        {firebaseData.map((user) => {
           return (
             <div>
               <span>name: {user.name}</span>
