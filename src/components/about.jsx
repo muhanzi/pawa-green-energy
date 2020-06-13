@@ -9,7 +9,7 @@ class About extends Component {
     this.state = {};
   }
   spanStyle = {
-    fontSize: 22,
+    fontSize: 20,
     backgroundColor: project().projectColor,
     color: "white",
     padding: 12,
@@ -43,7 +43,12 @@ class About extends Component {
             </Col>
           </Row>
           <Row style={{ padding: 10 }}>
-            <Col style={{ textAlign: "justify", fontSize: 20 }}>
+            <Col
+              style={{
+                // textAlign: "justify",
+                fontSize: 16,
+              }}
+            >
               PawaGreen energy is a Ugandan based renewable energy enterprise
               registered under the Ugandan law. We specifically target energy
               development services and emerging markets, with our core business
@@ -64,7 +69,7 @@ class About extends Component {
             <Col
               style={{
                 color: project().projectColor,
-                fontSize: 25,
+                fontSize: 20,
                 fontWeight: "bold",
               }}
             >
@@ -72,7 +77,12 @@ class About extends Component {
             </Col>
           </Row>
           <Row style={{ paddingBottom: 10, paddingLeft: 10, paddingRight: 10 }}>
-            <Col style={{ textAlign: "justify", fontSize: 20 }}>
+            <Col
+              style={{
+                // textAlign: "justify",
+                fontSize: 16,
+              }}
+            >
               To be a 3D (Driven by Data and Digital) Renewable Energy company
               providing total renewable energy solutions to customers.
             </Col>
@@ -81,15 +91,20 @@ class About extends Component {
             <Col
               style={{
                 color: project().projectColor,
-                fontSize: 25,
+                fontSize: 20,
                 fontWeight: "bold",
               }}
             >
               Our Expertise
             </Col>
           </Row>
-          <Row style={{ padding: 10 }}>
-            <Col style={{ textAlign: "justify", fontSize: 20 }}>
+          <Row style={{ paddingBottom: 10, paddingLeft: 10, paddingRight: 10 }}>
+            <Col
+              style={{
+                // textAlign: "justify",
+                fontSize: 16,
+              }}
+            >
               At PawaGreen Energy we;
               <br />
               <span
@@ -141,7 +156,7 @@ class About extends Component {
             <Col
               style={{
                 color: project().projectColor,
-                fontSize: 25,
+                fontSize: 20,
                 fontWeight: "bold",
               }}
             >
@@ -149,7 +164,12 @@ class About extends Component {
             </Col>
           </Row>
           <Row style={{ paddingBottom: 10, paddingLeft: 10, paddingRight: 10 }}>
-            <Col style={{ textAlign: "justify", fontSize: 20 }}>
+            <Col
+              style={{
+                // textAlign: "justify",
+                fontSize: 16,
+              }}
+            >
               To be a 3D (Driven by Data and Digital) Renewable Energy company
               providing total renewable energy solutions to customers.
             </Col>

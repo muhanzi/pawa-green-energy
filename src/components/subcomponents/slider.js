@@ -6,15 +6,32 @@ import image3 from "../../pictures/image3.jpg";
 import image4 from "../../pictures/image4.jpg";
 import "./styles/slider_styles.css";
 import GoogleFontNavItem from "./fonts/googleFontForNavItems";
+import project from "./static";
+
+const isSmallDevice = () => {
+  if (!project().check_width) {
+    return {
+      span1: 40,
+      span2: 25,
+    };
+  } else {
+    return {
+      span1: 30,
+      span2: 18,
+    };
+  }
+};
 
 const styles = {
   color: "white",
   fontWeight: "bolder",
+  fontSize: isSmallDevice().span1,
   // fontSize: "4vw"
 }; // Viewport is the browser window size. 1vw = 1% of viewport width.
 const styles_2 = {
   color: "white",
   fontWeight: "bolder",
+  fontSize: isSmallDevice().span2,
   // fontSize: "3vw"
 };
 

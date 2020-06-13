@@ -1,43 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Navbar, Nav, Row, Col } from "react-bootstrap";
 import project from "./static";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  navbar_selection_key1,
-  navbar_selection_key2,
-  navbar_selection_key3,
-} from "../../actions";
+import { useDispatch } from "react-redux";
+import { Redirect } from "react-router";
+import { show_AddUserModal } from "../../actions";
 import ContactBar from "./contactBar";
 import styled from "styled-components";
 import logo from "../../pictures/favicon.PNG";
 import GoogleFont from "./fonts/googleFont";
 import GoogleFontNavItem from "./fonts/googleFontForNavItems";
+import LoginAndSignUp from "../../firebase authentication/LoginAndSignUp";
+import { AuthContext } from "../../firebase authentication/Auth";
 
-function Navigation() {
-  const [activeNavLink, setActiveNavLink] = useState("");
-  const [nav_Items_style, setNav_Items_style] = useState({
-    color: project().projectColor,
-    fontWeight: "bold",
-  });
-
-  // current value in the store //
-  const key_selected = useSelector((state) => state.navbar); // check in the /reducers/index.js
-  //
-  const dispatch = useDispatch(); // but we can also use "useDispatch()" directly
-
+function Navigation(props) {
+  const dispatch = useDispatch();
   const handleSelection = (key) => {
     switch (key) {
       case "key1":
-        dispatch(navbar_selection_key1()); // do this action // tells the reducer which action to perform
-        setActiveNavLink("key1"); // i comment this because once you click on the Nav.Link this component will be reloaded // which turns 'activeNavLink' to "" again
         break;
       case "key2":
-        dispatch(navbar_selection_key2());
-        setActiveNavLink("key2");
+        // if (currentUser) {
+        //   return <Redirect to="/services" />;
+        // } else {
+        //   //dispatch(show_AddUserModal()); // do this action // tells the reducer which action to perform
+        //   alert(currentUser);
+        // }
         break;
       case "key3":
-        dispatch(navbar_selection_key3());
-        setActiveNavLink("key3");
+        break;
+      case "key4":
+        // if (currentUser) {
+        //   return <Redirect to="/services" />;
+        // } else {
+        dispatch(show_AddUserModal()); // do this action // tells the reducer which action to perform
+        //   alert(currentUser);
+        // }
         break;
       default:
     }
@@ -125,7 +122,7 @@ function Navigation() {
           id="responsive-navbar-nav"
           className="justify-content-end"
         >
-          <Nav onSelect={handleSelection} activeKey={activeNavLink}>
+          <Nav onSelect={handleSelection}>
             <Nav.Link href="/" eventKey="key1">
               <HoverSpan>
                 <GoogleFontNavItem
@@ -150,9 +147,7 @@ function Navigation() {
                 />
               </HoverSpan>
             </Nav.Link>
-            {/* remove /login  because we shall use popup for login and register // it will not be a route */}
-            {/* when user clcicks // we use redux to change the state of the popup to show it // useDispatch() */}
-            <Nav.Link href="/login" eventKey="key4">
+            <Nav.Link eventKey="key4">
               <HoverSpan>
                 <GoogleFontNavItem
                   text={"Login"}
@@ -162,6 +157,9 @@ function Navigation() {
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
+        {/* ---popup window--- */}
+        <LoginAndSignUp />
+        {/* ---popup window--- */}
       </Navbar>
     </div>
   );
