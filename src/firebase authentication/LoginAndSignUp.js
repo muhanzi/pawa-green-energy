@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useContext } from "react";
-import { withRouter, Redirect } from "react-router";
+import React, { useState } from "react";
+import { withRouter } from "react-router";
 import firebase from "../firebase.js";
 import $ from "jquery";
 import { Modal, Button, FormGroup } from "react-bootstrap";
@@ -8,10 +8,9 @@ import { useSelector, useDispatch } from "react-redux";
 import FloatingLabelInput from "react-floating-label-input";
 import { MDBBtn } from "mdbreact";
 import projectStyles from "../components/subcomponents/styles/Styles";
-import { hide_AddUserModal } from "../actions/index.js";
-import { AuthContext } from "./Auth.js";
+import { hide_AddUserModal, navbar_selection_key2 } from "../actions/index.js";
 
-// {history} --> Router
+// {history} --> Router // history is part of the props // history is available to all children of BrowserRouter
 const LoginAndSignUp = ({ history }) => {
   const [signUpFormHidden, setSignUpFormHidden] = useState(true);
   const [loginFormHidden, setLoginFormHidden] = useState(false);
@@ -23,9 +22,9 @@ const LoginAndSignUp = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const addUserModalStatus = useSelector((state) => state.addUserModal); //reducers/index.js
-
   const dispatch = useDispatch();
+
+  const addUserModalStatus = useSelector((state) => state.addUserModal); //reducers/index.js
 
   const hideAddUserModal = () => {
     dispatch(hide_AddUserModal());
@@ -102,42 +101,37 @@ const LoginAndSignUp = ({ history }) => {
     }
   };
 
-  const performSignIn = useCallback(
-    async (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      try {
-        await firebase.auth().signInWithEmailAndPassword(email, password);
-        history.push("/services");
-        emptySignInForm();
-        hideAddUserModal();
-      } catch (error) {
-        //alert(error);
-        $("#loginWarningTextId").html("sign in failed! " + error);
-      }
-    },
-    [history]
-  ); // this hook useCallback()  // is used for memoization // stores (cache) results of expensive function calls // it call the function only if one of the inputs has changed
+  const performSignIn = async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    try {
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+      history.push("/services");
+      dispatch(navbar_selection_key2());
+      emptySignInForm();
+      hideAddUserModal();
+    } catch (error) {
+      //alert(error);
+      $("#loginWarningTextId").html("sign in failed! " + error);
+    }
+  };
 
-  const performSignUp = useCallback(
-    async (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      try {
-        await firebase
-          .auth()
-          .createUserWithEmailAndPassword(addEmail, addPassword);
-        history.push("/services");
-        emptySignUpForm();
-        hideAddUserModal();
-      } catch (error) {
-        //alert(error);
-        $("#registrationWarningTextId").html("sign up failed! " + error);
-      }
-    },
-    [history]
-  ); // this hook useCallback()  // is used for memoization // stores (cache) results of expensive function calls // it call the function only if one of the inputs has changed
-
+  const performSignUp = async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    try {
+      await firebase
+        .auth()
+        .createUserWithEmailAndPassword(addEmail, addPassword);
+      history.push("/services");
+      dispatch(navbar_selection_key2());
+      emptySignUpForm();
+      hideAddUserModal();
+    } catch (error) {
+      //alert(error);
+      $("#registrationWarningTextId").html("sign up failed! " + error);
+    }
+  };
   const emptySignUpForm = () => {
     setAddFirstName("");
     setAddLastName("");
@@ -150,11 +144,6 @@ const LoginAndSignUp = ({ history }) => {
     setEmail("");
     setPassword("");
   };
-
-  // const { currentUser } = useContext(AuthContext);
-  // if (currentUser) {
-  //   return <Redirect to="/services" />;
-  // }
 
   return (
     <div>
@@ -285,6 +274,7 @@ const LoginAndSignUp = ({ history }) => {
                   label={"Email"}
                   type="email"
                   onBlur=""
+                  name="email"
                   value={email}
                   onChange={handleChangeEmail}
                   style={{ fontSize: 15, fontFamilly: "sans-serif" }}
@@ -296,6 +286,7 @@ const LoginAndSignUp = ({ history }) => {
                   label={"Password"}
                   onBlur=""
                   type="password"
+                  name="Password"
                   value={password}
                   onChange={handleChangePassword}
                   style={{ fontSize: 15 }}

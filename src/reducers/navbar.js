@@ -1,4 +1,4 @@
-const navbar_selection_reducer = (state = "", action) => {
+const navbar_selection_reducer = (state = "key1", action) => {
   switch (action.type) {
     case "KEY1_SELECTED":
       state = "key1";

@@ -1,9 +1,14 @@
 import React, { useState, useContext } from "react";
 import { Navbar, Nav, Row, Col } from "react-bootstrap";
 import project from "./static";
-import { useDispatch } from "react-redux";
-import { Redirect } from "react-router";
-import { show_AddUserModal } from "../../actions";
+import { useDispatch, useSelector } from "react-redux";
+import { withRouter, Redirect } from "react-router";
+import {
+  show_AddUserModal,
+  navbar_selection_key1,
+  navbar_selection_key2,
+  navbar_selection_key3,
+} from "../../actions";
 import ContactBar from "./contactBar";
 import styled from "styled-components";
 import logo from "../../pictures/favicon.PNG";
@@ -11,34 +16,76 @@ import GoogleFont from "./fonts/googleFont";
 import GoogleFontNavItem from "./fonts/googleFontForNavItems";
 import LoginAndSignUp from "../../firebase authentication/LoginAndSignUp";
 import { AuthContext } from "../../firebase authentication/Auth";
+import firebase from "../../firebase.js";
+import { useEffect } from "react";
 
-function Navigation(props) {
+// history --> props object // props.history
+function Navigation({ history }) {
   const dispatch = useDispatch();
+  // current value in the store //
+  const key_selected = useSelector((state) => state.navbar); // check in the /reducers/index.js
+  //
+  const keySelectedStyle = {
+    color: "white",
+    cursor: "pointer",
+    backgroundColor: project().projectColor,
+    fontWeight: "bold",
+    borderRadius: "4px 4px",
+    padding: "8px",
+  };
+  const [key1Selected, setKey1Selected] = useState(keySelectedStyle);
+  const [key2Selected, setKey2Selected] = useState({});
+  const [key3Selected, setKey3Selected] = useState({});
+  //
+  const { currentUser } = useContext(AuthContext);
+  const [loginStatus, setLoginStatus] = useState("Login");
+
   const handleSelection = (key) => {
     switch (key) {
       case "key1":
+        history.push("/");
+        dispatch(navbar_selection_key1()); // do this action // tells the reducer which action to perform
+        setKey1Selected(keySelectedStyle);
+        setKey2Selected({});
+        setKey3Selected({});
         break;
       case "key2":
-        // if (currentUser) {
-        //   return <Redirect to="/services" />;
-        // } else {
-        //   //dispatch(show_AddUserModal()); // do this action // tells the reducer which action to perform
-        //   alert(currentUser);
-        // }
+        dispatch(navbar_selection_key2());
+        if (currentUser) {
+          dispatch(navbar_selection_key2());
+          history.push("/services");
+          setKey1Selected({});
+          setKey2Selected(keySelectedStyle);
+          setKey3Selected({});
+        } else {
+          dispatch(show_AddUserModal()); // do this action // tells the reducer which action to perform
+        }
         break;
       case "key3":
+        history.push("/about");
+        dispatch(navbar_selection_key3());
+        setKey1Selected({});
+        setKey2Selected({});
+        setKey3Selected(keySelectedStyle);
         break;
       case "key4":
-        // if (currentUser) {
-        //   return <Redirect to="/services" />;
-        // } else {
-        dispatch(show_AddUserModal()); // do this action // tells the reducer which action to perform
-        //   alert(currentUser);
-        // }
+        if (currentUser) {
+          firebase.auth().signOut();
+        } else {
+          dispatch(show_AddUserModal()); // do this action // tells the reducer which action to perform
+        }
         break;
       default:
     }
   };
+
+  useEffect(() => {
+    if (currentUser) {
+      setLoginStatus("Logout");
+    } else {
+      setLoginStatus("Login");
+    }
+  });
 
   const HoverSpan = styled.span`
     color: #1d8348;
@@ -122,25 +169,25 @@ function Navigation(props) {
           id="responsive-navbar-nav"
           className="justify-content-end"
         >
-          <Nav onSelect={handleSelection}>
-            <Nav.Link href="/" eventKey="key1">
-              <HoverSpan>
+          <Nav onSelect={handleSelection} activeKey={key_selected}>
+            <Nav.Link eventKey="key1">
+              <HoverSpan style={key1Selected}>
                 <GoogleFontNavItem
                   text={"Home"}
                   fontfamily={project().nav_item_font}
                 />
               </HoverSpan>
             </Nav.Link>
-            <Nav.Link href="/services" eventKey="key2">
-              <HoverSpan>
+            <Nav.Link eventKey="key2">
+              <HoverSpan style={key2Selected}>
                 <GoogleFontNavItem
                   text={"Products & Services"}
                   fontfamily={project().nav_item_font}
                 />
               </HoverSpan>
             </Nav.Link>
-            <Nav.Link href="/about" eventKey="key3">
-              <HoverSpan>
+            <Nav.Link eventKey="key3">
+              <HoverSpan style={key3Selected}>
                 <GoogleFontNavItem
                   text={"About"}
                   fontfamily={project().nav_item_font}
@@ -150,7 +197,7 @@ function Navigation(props) {
             <Nav.Link eventKey="key4">
               <HoverSpan>
                 <GoogleFontNavItem
-                  text={"Login"}
+                  text={loginStatus}
                   fontfamily={project().nav_item_font}
                 />
               </HoverSpan>
@@ -165,4 +212,4 @@ function Navigation(props) {
   );
 }
 
-export default Navigation;
+export default withRouter(Navigation);
