@@ -292,7 +292,7 @@ class Home extends Component {
       hours_per_day: 1,
       days_per_week: 1,
       weeks_per_month: 1,
-      total_units: "00",
+      total_units: this.calculate_total_units(1, 1, 1, power_value, 1),
     });
   }
   handle_changed_number_of_devices = (event) => {
@@ -818,7 +818,9 @@ class Home extends Component {
                           getOptionLabel={(option) => option.title} // is like a forEach to fill the select tag options
                           onChange={(event, value) => {
                             //console.log(value); // an object with title and power values
-                            this.device_selected(value.power);
+                            if (value) {
+                              this.device_selected(value.power);
+                            }
                           }}
                           style={{
                             width: 175,
@@ -969,7 +971,7 @@ class Home extends Component {
                         }}
                       >
                         <span>
-                          Total is {this.state.total_units} units{" "}
+                          Total per month is {this.state.total_units} units{" "}
                           {/* <GoogleFontNavItem
                             text={"Total is "+this.state.total_units+" units"}
                             fontfamily={"pacifico"}

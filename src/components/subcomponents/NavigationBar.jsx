@@ -2,12 +2,15 @@ import React, { useState, useContext } from "react";
 import { Navbar, Nav, Row, Col } from "react-bootstrap";
 import project from "./static";
 import { useDispatch, useSelector } from "react-redux";
-import { withRouter, Redirect } from "react-router";
+import { withRouter } from "react-router";
+import { useLocation } from "react-router-dom";
 import {
   show_AddUserModal,
   navbar_selection_key1,
   navbar_selection_key2,
   navbar_selection_key3,
+  user_signed_out,
+  user_signed_in,
 } from "../../actions";
 import ContactBar from "./contactBar";
 import styled from "styled-components";
@@ -25,18 +28,6 @@ function Navigation({ history }) {
   // current value in the store //
   const key_selected = useSelector((state) => state.navbar); // check in the /reducers/index.js
   //
-  const keySelectedStyle = {
-    color: "white",
-    cursor: "pointer",
-    backgroundColor: project().projectColor,
-    fontWeight: "bold",
-    borderRadius: "4px 4px",
-    padding: "8px",
-  };
-  const [key1Selected, setKey1Selected] = useState(keySelectedStyle);
-  const [key2Selected, setKey2Selected] = useState({});
-  const [key3Selected, setKey3Selected] = useState({});
-  //
   const { currentUser } = useContext(AuthContext);
   const [loginStatus, setLoginStatus] = useState("Login");
 
@@ -45,18 +36,11 @@ function Navigation({ history }) {
       case "key1":
         history.push("/");
         dispatch(navbar_selection_key1()); // do this action // tells the reducer which action to perform
-        setKey1Selected(keySelectedStyle);
-        setKey2Selected({});
-        setKey3Selected({});
         break;
       case "key2":
         dispatch(navbar_selection_key2());
         if (currentUser) {
-          dispatch(navbar_selection_key2());
-          history.push("/services");
-          setKey1Selected({});
-          setKey2Selected(keySelectedStyle);
-          setKey3Selected({});
+          getUserDetails(firebase.auth().currentUser.uid); // just to get user details when user might have reloaded the window but didn't sign out
         } else {
           dispatch(show_AddUserModal()); // do this action // tells the reducer which action to perform
         }
@@ -64,13 +48,11 @@ function Navigation({ history }) {
       case "key3":
         history.push("/about");
         dispatch(navbar_selection_key3());
-        setKey1Selected({});
-        setKey2Selected({});
-        setKey3Selected(keySelectedStyle);
         break;
       case "key4":
         if (currentUser) {
           firebase.auth().signOut();
+          dispatch(user_signed_out());
         } else {
           dispatch(show_AddUserModal()); // do this action // tells the reducer which action to perform
         }
@@ -79,6 +61,8 @@ function Navigation({ history }) {
     }
   };
 
+  let location = useLocation();
+
   useEffect(() => {
     if (currentUser) {
       setLoginStatus("Logout");
@@ -86,6 +70,36 @@ function Navigation({ history }) {
       setLoginStatus("Login");
     }
   });
+
+  const currentRoute = (path) => {
+    if (location.pathname === path) {
+      return {
+        color: "white",
+        cursor: "pointer",
+        backgroundColor: project().projectColor,
+        fontWeight: "bold",
+        borderRadius: "4px 4px",
+        padding: "8px",
+      };
+    } else {
+      return {};
+    }
+  };
+
+  const getUserDetails = (id) => {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(id)
+      .onSnapshot((snapshot) => {
+        const user = snapshot.data();
+        if (user) {
+          dispatch(user_signed_in(user));
+          dispatch(navbar_selection_key2());
+          history.push("/services");
+        }
+      });
+  };
 
   const HoverSpan = styled.span`
     color: #1d8348;
@@ -171,7 +185,7 @@ function Navigation({ history }) {
         >
           <Nav onSelect={handleSelection} activeKey={key_selected}>
             <Nav.Link eventKey="key1">
-              <HoverSpan style={key1Selected}>
+              <HoverSpan style={currentRoute("/")}>
                 <GoogleFontNavItem
                   text={"Home"}
                   fontfamily={project().nav_item_font}
@@ -179,7 +193,7 @@ function Navigation({ history }) {
               </HoverSpan>
             </Nav.Link>
             <Nav.Link eventKey="key2">
-              <HoverSpan style={key2Selected}>
+              <HoverSpan style={currentRoute("/services")}>
                 <GoogleFontNavItem
                   text={"Products & Services"}
                   fontfamily={project().nav_item_font}
@@ -187,7 +201,7 @@ function Navigation({ history }) {
               </HoverSpan>
             </Nav.Link>
             <Nav.Link eventKey="key3">
-              <HoverSpan style={key3Selected}>
+              <HoverSpan style={currentRoute("/about")}>
                 <GoogleFontNavItem
                   text={"About"}
                   fontfamily={project().nav_item_font}

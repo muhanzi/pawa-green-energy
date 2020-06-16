@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { withRouter } from "react-router";
 import firebase from "../firebase.js";
 import $ from "jquery";
@@ -8,7 +8,11 @@ import { useSelector, useDispatch } from "react-redux";
 import FloatingLabelInput from "react-floating-label-input";
 import { MDBBtn } from "mdbreact";
 import projectStyles from "../components/subcomponents/styles/Styles";
-import { hide_AddUserModal, navbar_selection_key2 } from "../actions/index.js";
+import {
+  hide_AddUserModal,
+  navbar_selection_key2,
+  user_signed_in,
+} from "../actions/index.js";
 
 // {history} --> Router // history is part of the props // history is available to all children of BrowserRouter
 const LoginAndSignUp = ({ history }) => {
@@ -62,6 +66,8 @@ const LoginAndSignUp = ({ history }) => {
     setPassword(event.target.value);
   };
 
+  // !addPhoneNumber.match(/^[0-9]{10,15}$/)
+
   const validateForm = function () {
     if (addFirstName.trim().replace(" ", "").length < 1) {
       $("#registrationWarningTextId").html("firstname is required !");
@@ -72,9 +78,15 @@ const LoginAndSignUp = ({ history }) => {
     } else if (addPhoneNumber.trim().replace(" ", "").length < 1) {
       $("#registrationWarningTextId").html("phone number is required !");
       return false;
-    }
-    // else if(addPhoneNumber.match(/^[0-9]{10,15}$/)){}
-    else if (addEmail.trim().replace(" ", "").length < 1) {
+    } else if (
+      !addPhoneNumber.match(
+        /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
+      )
+    ) {
+      $("#registrationWarningTextId").html(
+        "phone number is incorrectly formatted"
+      );
+    } else if (addEmail.trim().replace(" ", "").length < 1) {
       $("#registrationWarningTextId").html("email is required !");
       return false;
     } else if (addPassword.length < 6) {
@@ -106,10 +118,7 @@ const LoginAndSignUp = ({ history }) => {
     event.stopPropagation();
     try {
       await firebase.auth().signInWithEmailAndPassword(email, password);
-      history.push("/services");
-      dispatch(navbar_selection_key2());
-      emptySignInForm();
-      hideAddUserModal();
+      getUserDetails(firebase.auth().currentUser.uid);
     } catch (error) {
       //alert(error);
       $("#loginWarningTextId").html("sign in failed! " + error);
@@ -123,12 +132,16 @@ const LoginAndSignUp = ({ history }) => {
       await firebase
         .auth()
         .createUserWithEmailAndPassword(addEmail, addPassword);
-      history.push("/services");
-      dispatch(navbar_selection_key2());
-      emptySignUpForm();
-      hideAddUserModal();
+      saveUserDetails({
+        id: firebase.auth().currentUser.uid,
+        name: addFirstName + " " + addLastName,
+        phone: addPhoneNumber,
+        email: addEmail,
+        address: "empty",
+        role: "customer",
+        selection: [],
+      });
     } catch (error) {
-      //alert(error);
       $("#registrationWarningTextId").html("sign up failed! " + error);
     }
   };
@@ -143,6 +156,37 @@ const LoginAndSignUp = ({ history }) => {
   const emptySignInForm = () => {
     setEmail("");
     setPassword("");
+  };
+
+  const saveUserDetails = async (user) => {
+    try {
+      await firebase.firestore().collection("users").doc(user.id).set(user);
+      dispatch(user_signed_in(user));
+      history.push("/services");
+      dispatch(navbar_selection_key2());
+      emptySignUpForm();
+      hideAddUserModal();
+    } catch (error) {
+      firebase.auth().currentUser.delete(); // because user was created but we failed to get his details
+      $("#registrationWarningTextId").html("sign up failed! Try again");
+    }
+  };
+
+  const getUserDetails = (id) => {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(id)
+      .onSnapshot((snapshot) => {
+        const user = snapshot.data();
+        if (user) {
+          dispatch(user_signed_in(user));
+          history.push("/services");
+          dispatch(navbar_selection_key2());
+          emptySignInForm();
+          hideAddUserModal();
+        }
+      });
   };
 
   return (
@@ -193,7 +237,6 @@ const LoginAndSignUp = ({ history }) => {
                 <FloatingLabelInput
                   id="PhoneNumberId"
                   label={"phone number"}
-                  type="number"
                   onBlur=""
                   value={addPhoneNumber}
                   onChange={handleChangePhoneNumber}

@@ -24,3 +24,9 @@ export const show_AddUserModal = () => {
 export const hide_AddUserModal = () => {
   return { type: "HIDE" };
 };
+export const user_signed_in = (user) => {
+  return { type: "SIGNED_IN", payload: user };
+};
+export const user_signed_out = () => {
+  return { type: "SIGNED_OUT" };
+};
