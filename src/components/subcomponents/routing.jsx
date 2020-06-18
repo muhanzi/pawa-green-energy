@@ -11,7 +11,7 @@ import MyFooter from "./footer";
 const MyRoutes = () => {
   return (
     <BrowserRouter>
-      <Navigation />
+      <Navigation style={{ position: "fixed" }} />
       <Switch>
         <Route exact path="/" component={Home} />
         {/* protected route // to access /services user must be logged in */}

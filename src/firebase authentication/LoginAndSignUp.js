@@ -12,7 +12,9 @@ import {
   hide_AddUserModal,
   navbar_selection_key2,
   user_signed_in,
+  user_signed_out,
 } from "../actions/index.js";
+import LinearDeterminate from "../components/subcomponents/linearProgressBar.js";
 
 // {history} --> Router // history is part of the props // history is available to all children of BrowserRouter
 const LoginAndSignUp = ({ history }) => {
@@ -25,6 +27,14 @@ const LoginAndSignUp = ({ history }) => {
   const [addPassword, setAddPassword] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [
+    hiddenLoginLinearDeterminate,
+    setHiddenLoginLinearDeterminate,
+  ] = useState(true);
+  const [
+    hiddenSignUpLinearDeterminate,
+    setHiddenSignUpLinearDeterminate,
+  ] = useState(true);
 
   const dispatch = useDispatch();
 
@@ -116,11 +126,12 @@ const LoginAndSignUp = ({ history }) => {
   const performSignIn = async (event) => {
     event.preventDefault();
     event.stopPropagation();
+    setHiddenLoginLinearDeterminate(false);
     try {
       await firebase.auth().signInWithEmailAndPassword(email, password);
       getUserDetails(firebase.auth().currentUser.uid);
     } catch (error) {
-      //alert(error);
+      setHiddenLoginLinearDeterminate(true);
       $("#loginWarningTextId").html("sign in failed! " + error);
     }
   };
@@ -128,6 +139,7 @@ const LoginAndSignUp = ({ history }) => {
   const performSignUp = async (event) => {
     event.preventDefault();
     event.stopPropagation();
+    setHiddenSignUpLinearDeterminate(false);
     try {
       await firebase
         .auth()
@@ -142,6 +154,7 @@ const LoginAndSignUp = ({ history }) => {
         selection: [],
       });
     } catch (error) {
+      setHiddenSignUpLinearDeterminate(true);
       $("#registrationWarningTextId").html("sign up failed! " + error);
     }
   };
@@ -162,12 +175,14 @@ const LoginAndSignUp = ({ history }) => {
     try {
       await firebase.firestore().collection("users").doc(user.id).set(user);
       dispatch(user_signed_in(user));
+      setHiddenSignUpLinearDeterminate(true);
       history.push("/services");
       dispatch(navbar_selection_key2());
       emptySignUpForm();
       hideAddUserModal();
     } catch (error) {
       firebase.auth().currentUser.delete(); // because user was created but we failed to get his details
+      setHiddenSignUpLinearDeterminate(true);
       $("#registrationWarningTextId").html("sign up failed! Try again");
     }
   };
@@ -181,10 +196,17 @@ const LoginAndSignUp = ({ history }) => {
         const user = snapshot.data();
         if (user) {
           dispatch(user_signed_in(user));
+          setHiddenLoginLinearDeterminate(true);
           history.push("/services");
           dispatch(navbar_selection_key2());
           emptySignInForm();
           hideAddUserModal();
+        } else {
+          // if we cannot get user details // we ask user to login again
+          firebase.auth().signOut();
+          dispatch(user_signed_out());
+          setHiddenLoginLinearDeterminate(true);
+          $("#loginWarningTextId").html("sign in failed! Try again");
         }
       });
   };
@@ -273,7 +295,13 @@ const LoginAndSignUp = ({ history }) => {
               >
                 Sign In
               </a>
-              <FormGroup style={{ paddingTop: 20 }}>
+              <FormGroup
+                style={{ paddingTop: 20 }}
+                hidden={hiddenSignUpLinearDeterminate}
+              >
+                <LinearDeterminate />
+              </FormGroup>
+              <FormGroup>
                 <span
                   className="text-danger"
                   id="registrationWarningTextId"
@@ -343,7 +371,13 @@ const LoginAndSignUp = ({ history }) => {
               >
                 Register
               </a>
-              <FormGroup style={{ paddingTop: 20 }}>
+              <FormGroup
+                style={{ paddingTop: 20 }}
+                hidden={hiddenLoginLinearDeterminate}
+              >
+                <LinearDeterminate />
+              </FormGroup>
+              <FormGroup>
                 <span className="text-danger" id="loginWarningTextId"></span>
               </FormGroup>
             </p>

@@ -38,7 +38,6 @@ function Navigation({ history }) {
         dispatch(navbar_selection_key1()); // do this action // tells the reducer which action to perform
         break;
       case "key2":
-        dispatch(navbar_selection_key2());
         if (currentUser) {
           getUserDetails(firebase.auth().currentUser.uid); // just to get user details when user might have reloaded the window but didn't sign out
         } else {
@@ -69,7 +68,7 @@ function Navigation({ history }) {
     } else {
       setLoginStatus("Login");
     }
-  });
+  }, [currentUser]); // [currentUser,...] // is the dependencyList meaning that useEffect() will activate only when values in the list change
 
   const currentRoute = (path) => {
     if (location.pathname === path) {
@@ -97,6 +96,11 @@ function Navigation({ history }) {
           dispatch(user_signed_in(user));
           dispatch(navbar_selection_key2());
           history.push("/services");
+        } else {
+          // if we cannot get user details // we ask user to login again
+          firebase.auth().signOut();
+          dispatch(user_signed_out());
+          dispatch(show_AddUserModal());
         }
       });
   };
@@ -125,7 +129,8 @@ function Navigation({ history }) {
   };
 
   return (
-    <div>
+    // make a div element stack to top // we also use zIndex --> 1 means that when scrolling other element when they reach this position tehy should pass behind this div // -1 means they pass in front of this div // 0 means that they just mix up together
+    <div style={{ position: "sticky", top: 0, zIndex: 1 }}>
       <ContactBar />
       <Navbar
         collapseOnSelect

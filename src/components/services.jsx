@@ -47,6 +47,8 @@ function Services() {
   */
 
   const user_details = useSelector((state) => state.userSigning);
+  const selection = user_details.selection ? user_details.selection : [];
+  const [hideCards, setHideCards] = useState(true);
 
   const cards_data = [
     {
@@ -190,7 +192,7 @@ function Services() {
     },
   ];
 
-  const product_selected = (power_value) => {};
+  const product_selected = (product_title) => {};
 
   const check_Autocomplete_width = () => {
     if (window.screen.availWidth < 500) {
@@ -198,6 +200,18 @@ function Services() {
     }
     return 300;
   };
+
+  useEffect(() => {
+    if (user_details.selection) {
+      if (user_details.selection.length > 0) {
+        setHideCards(true);
+      } else {
+        setHideCards(false);
+      }
+    } else {
+      setHideCards(false);
+    }
+  }, [user_details.selection]);
 
   return (
     <div style={{ minHeight: 500 }}>
@@ -249,52 +263,39 @@ function Services() {
           </Col>
         </Row>
         <Row>
-          {
-            cards_data.map((data) => {
-              return (
-                <Col
-                  dm={3}
-                  style={{
-                    paddingBottom: 20,
-                  }}
-                >
-                  <Card data={data} />
-                </Col>
-              );
-            })
-
-            /*
-            () => {
+          {selection.map((selected_product) => {
+            if (user_details.selection) {
               if (user_details.selection.length > 0) {
-                // show the products that user has selected // with the design we planned
-                user_details.selection.map((product_selected) => {
-                  select_products.filter((product) => {
-                    if (product.title === product_selected) {
-                      return (
-                        <Row>
-                          <Col>picture</Col>
-                          <Col>product_selected</Col>
-                        </Row>
-                      );
-                    }
-                  });
-                });
-              } else {
-                cards_data.map((data) => {
+                let service = select_products.find(
+                  (product) => product.title === selected_product
+                ); // if it does not find any matching object in the array // service will be undefined
+                if (service) {
                   return (
-                    <Col
-                      dm={3}
-                      style={{
-                        paddingBottom: 20,
-                      }}
-                    >
-                      <Card data={data} />
+                    <Col>
+                      <Row>{service.title}</Row>
+                      <Row>{service.description}</Row>
+                      <Row>{service.price}</Row>
+                      <Row>{service.photo}</Row>
                     </Col>
                   );
-                });
+                }
               }
-            }*/
-          }
+            }
+          })}
+        </Row>
+        <Row hidden={hideCards}>
+          {cards_data.map((data) => {
+            return (
+              <Col
+                dm={3}
+                style={{
+                  paddingBottom: 20,
+                }}
+              >
+                <Card data={data} />
+              </Col>
+            );
+          })}
         </Row>
       </Container>
       <FooterList />
