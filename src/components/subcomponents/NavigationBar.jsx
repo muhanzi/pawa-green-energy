@@ -77,6 +77,12 @@ function Navigation({ history }) {
     } else {
       setLoginStatus("Login");
     }
+    //
+    if (selection.length > 0) {
+      setHideBadge(false);
+    } else {
+      setHideBadge(true);
+    }
   }, [currentUser, selection]); // [currentUser,...] // is the dependencyList meaning that useEffect() will activate only when values in the list change
 
   const currentRoute = (path) => {
@@ -135,13 +141,6 @@ function Navigation({ history }) {
     backgroundRepeat: "no-repeat",
     height: 70,
     width: 70,
-  };
-
-  const check_selection_size = () => {
-    if (selection.length > 0) {
-      setHideBadge(false);
-    }
-    setHideBadge(true);
   };
 
   return (
@@ -219,12 +218,15 @@ function Navigation({ history }) {
                   text={"Products & Services"}
                   fontfamily={project().nav_item_font}
                 />
-                <span
-                  class="badge badge-info"
-                  style={{ marginLeft: 4, borderRadius: "50%" }}
-                >
-                  {selection.length}
-                </span>
+                <sup>
+                  <span
+                    class="badge badge-info"
+                    style={{ marginLeft: 2 }}
+                    hidden={hideBadge}
+                  >
+                    {selection.length}
+                  </span>
+                </sup>
               </HoverSpan>
             </Nav.Link>
             <Nav.Link eventKey="key3">
