@@ -6,12 +6,14 @@ import {
   MDBCardImage,
   MDBCardTitle,
   MDBCardText,
-  MDBCol
+  MDBCol,
 } from "mdbreact";
 import Box from "@material-ui/core/Box";
 import project from "./static";
 import GoogleFontNavItem from "./fonts/googleFontForNavItems";
 import { Button } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
 class Card extends Component {
   constructor(props) {
@@ -62,7 +64,7 @@ class Card extends Component {
               border: 0,
               paddingTop: 0,
               backgroundColor: project().home_component_background_color,
-              margin: "0 auto"
+              margin: "0 auto",
             }}
           >
             <Box
@@ -79,7 +81,7 @@ class Card extends Component {
                   borderTopRightRadius: 10,
                   opacity: 0.9, // 1
                   height: 180,
-                  width: "100%"
+                  width: "100%",
                 }}
               />
               <MDBCardBody>
@@ -104,14 +106,19 @@ class Card extends Component {
                   style={{
                     backgroundColor: project().projectColor,
                     color: "white",
-                    marginTop: 2
+                    marginTop: 2,
                   }}
                   onClick={this.checkButtonAction}
                 >
-                  <GoogleFontNavItem
-                    text={this.props.data.buttonText}
-                    fontfamily={"tangerine"}
-                  />
+                  <span>
+                    <FontAwesomeIcon icon={faShoppingCart} color={"#FFFFF"} />
+                    <span style={{ paddingLeft: 5 }}>
+                      <GoogleFontNavItem
+                        text={this.props.data.buttonText}
+                        fontfamily={"tangerine"}
+                      />
+                    </span>
+                  </span>
                 </Button>
               </MDBCardBody>
             </Box>

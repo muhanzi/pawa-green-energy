@@ -139,7 +139,7 @@ class Home extends Component {
   cards_data = [
     {
       title: "PGE-SPV",
-      buttonText: "order",
+      buttonText: "Add to cart",
       image: image3,
       buttonAction: "oder_SPV",
       details: "Solar Photovoltaic System (panels, batteries, inverters, remote controllers monitoring panels, etc.".substring(
@@ -149,7 +149,7 @@ class Home extends Component {
     },
     {
       title: "PGE-SWS",
-      buttonText: "order",
+      buttonText: "Add to cart",
       image: sws,
       buttonAction: "oder_SWS",
       details: "Solar Water Heating System (flat plate, glass tube, & sovaltten)".substring(
@@ -159,7 +159,7 @@ class Home extends Component {
     },
     {
       title: "PGE-SLS",
-      buttonText: "order",
+      buttonText: "Add to cart",
       image: sls,
       buttonAction: "oder_SLS",
       details: "Solar Lighting System (all in one street, compound and garden lights, indoor and outdoor lights)".substring(
@@ -169,7 +169,7 @@ class Home extends Component {
     },
     {
       title: "PGE-CRS",
-      buttonText: "order",
+      buttonText: "Add to cart",
       image: crs,
       buttonAction: "oder_CRS",
       details: "Solar refrigeration & cold chain systems (solar fridges, freezer, cold rooms storage, systems)".substring(
@@ -179,7 +179,7 @@ class Home extends Component {
     },
     {
       title: "PGE-SAB",
-      buttonText: "order",
+      buttonText: "Add to cart",
       image: sab,
       buttonAction: "oder_SAB",
       details: "Solar Agri-Business (solar water pumps, milling machines and dryers)".substring(
@@ -189,7 +189,7 @@ class Home extends Component {
     },
     {
       title: "PGE-SPS",
-      buttonText: "order",
+      buttonText: "Add to cart",
       image: sps,
       buttonAction: "oder_SPS",
       details: "Security & Protection Systems (CCTV cameras, firefighting & alarm systems, lightning protection systems)".substring(
@@ -199,7 +199,7 @@ class Home extends Component {
     },
     {
       title: "PGE-EPE",
-      buttonText: "order",
+      buttonText: "Add to cart",
       image: epe,
       buttonAction: "oder_EPE",
       details: "Electrical tools & personal protection equipment (meters, hand tools, power tools, & personal protection equipment".substring(
@@ -209,7 +209,7 @@ class Home extends Component {
     },
     {
       title: "PGE-ESC",
-      buttonText: "order",
+      buttonText: "Add to cart",
       image: esc,
       buttonAction: "oder_ESC",
       details: "Services (design, installation & maintenance of solar systems, energy metering, energy consultancy services, energy efficiency, training, etc.)".substring(
@@ -972,10 +972,6 @@ class Home extends Component {
                       >
                         <span>
                           Total per month is {this.state.total_units} units{" "}
-                          {/* <GoogleFontNavItem
-                            text={"Total is "+this.state.total_units+" units"}
-                            fontfamily={"pacifico"}
-                          /> */}
                         </span>
                       </Col>
                     </Row>

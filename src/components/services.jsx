@@ -3,7 +3,7 @@ import firebase from "../firebase.js";
 import { useEffect } from "react";
 import FooterList from "./subcomponents/footerList";
 import project from "./subcomponents/static";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Image, Button } from "react-bootstrap";
 import Card from "./subcomponents/card";
 import image3 from "../pictures/image3.jpg";
 import sws from "../pictures/sws.jpg";
@@ -17,6 +17,8 @@ import GoogleFontNavItem from "./subcomponents/fonts/googleFontForNavItems";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useSelector } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
 function Services() {
   /*
@@ -53,7 +55,7 @@ function Services() {
   const cards_data = [
     {
       title: "PGE-SPV",
-      buttonText: "order",
+      buttonText: "Add to cart",
       image: image3,
       buttonAction: "oder_SPV",
       details: "Solar Photovoltaic System (panels, batteries, inverters, remote controllers monitoring panels, etc.".substring(
@@ -63,7 +65,7 @@ function Services() {
     },
     {
       title: "PGE-SWS",
-      buttonText: "order",
+      buttonText: "Add to cart",
       image: sws,
       buttonAction: "oder_SWS",
       details: "Solar Water Heating System (flat plate, glass tube, & sovaltten)".substring(
@@ -73,7 +75,7 @@ function Services() {
     },
     {
       title: "PGE-SLS",
-      buttonText: "order",
+      buttonText: "Add to cart",
       image: sls,
       buttonAction: "oder_SLS",
       details: "Solar Lighting System (all in one street, compound and garden lights, indoor and outdoor lights)".substring(
@@ -83,7 +85,7 @@ function Services() {
     },
     {
       title: "PGE-CRS",
-      buttonText: "order",
+      buttonText: "Add to cart",
       image: crs,
       buttonAction: "oder_CRS",
       details: "Solar refrigeration & cold chain systems (solar fridges, freezer, cold rooms storage, systems)".substring(
@@ -93,7 +95,7 @@ function Services() {
     },
     {
       title: "PGE-SAB",
-      buttonText: "order",
+      buttonText: "Add to cart",
       image: sab,
       buttonAction: "oder_SAB",
       details: "Solar Agri-Business (solar water pumps, milling machines and dryers)".substring(
@@ -103,7 +105,7 @@ function Services() {
     },
     {
       title: "PGE-SPS",
-      buttonText: "order",
+      buttonText: "Add to cart",
       image: sps,
       buttonAction: "oder_SPS",
       details: "Security & Protection Systems (CCTV cameras, firefighting & alarm systems, lightning protection systems)".substring(
@@ -113,7 +115,7 @@ function Services() {
     },
     {
       title: "PGE-EPE",
-      buttonText: "order",
+      buttonText: "Add to cart",
       image: epe,
       buttonAction: "oder_EPE",
       details: "Electrical tools & personal protection equipment (meters, hand tools, power tools, & personal protection equipment".substring(
@@ -123,7 +125,7 @@ function Services() {
     },
     {
       title: "PGE-ESC",
-      buttonText: "order",
+      buttonText: "Add to cart",
       image: esc,
       buttonAction: "oder_ESC",
       details: "Services (design, installation & maintenance of solar systems, energy metering, energy consultancy services, energy efficiency, training, etc.)".substring(
@@ -213,6 +215,22 @@ function Services() {
     }
   }, [user_details.selection]);
 
+  const check_column_paddingleft = () => {
+    // those 2 columns // each one has minimum width of 200 // so the two columns can only show together if screen width is equal or greater than 400
+    if (window.screen.availWidth < 400) {
+      return 30;
+    }
+    return 0;
+  };
+
+  const check_column_textalign = () => {
+    // those 2 columns // each one has minimum width of 200 // so the two columns can only show together if screen width is equal or greater than 400
+    if (window.screen.availWidth < 400) {
+      return "left";
+    }
+    return "center";
+  };
+
   return (
     <div style={{ minHeight: 500 }}>
       <Container
@@ -271,17 +289,115 @@ function Services() {
                 ); // if it does not find any matching object in the array // service will be undefined
                 if (service) {
                   return (
-                    <Col>
-                      <Row>{service.title}</Row>
-                      <Row>{service.description}</Row>
-                      <Row>{service.price}</Row>
-                      <Row>{service.photo}</Row>
+                    <Col lg={6}>
+                      <Row>
+                        <Col
+                          style={{
+                            minHeight: 200,
+                            minWidth: 200,
+                            paddingTop: 25,
+                            paddingBottom: 25,
+                            textAlign: check_column_textalign(),
+                          }}
+                        >
+                          <Image
+                            fluid
+                            src={service.photo}
+                            alt="Image Loading..."
+                            style={{
+                              height: "200px",
+                              width: "200px",
+                            }}
+                          />
+                        </Col>
+                        <Col
+                          style={{
+                            minHeight: 100,
+                            minWidth: 200,
+                            margin: "0 auto",
+                            paddingTop: 25,
+                            paddingBottom: 25,
+                            paddingRight: 30,
+                            paddingLeft: check_column_paddingleft(),
+                          }}
+                        >
+                          <Row style={{ fontSize: 20 }}>
+                            <GoogleFontNavItem
+                              text={service.title}
+                              fontfamily={"tangerine"}
+                            />
+                          </Row>
+                          <Row style={{ fontSize: 15 }}>
+                            <GoogleFontNavItem
+                              text={service.description}
+                              fontfamily={"tangerine"}
+                            />
+                          </Row>
+                          <Row style={{ fontSize: 17, paddingTop: 10 }}>
+                            <GoogleFontNavItem
+                              text={
+                                Number.parseFloat(
+                                  service.price
+                                ).toLocaleString() + " ugx"
+                              }
+                              fontfamily={"tangerine"}
+                            />
+                          </Row>
+                          <Row style={{ fontSize: 17, paddingTop: 10 }}>
+                            <Button
+                              variant="outline-success"
+                              style={{
+                                backgroundColor: "#FFFFF",
+                                marginTop: 2,
+                              }}
+                            >
+                              <GoogleFontNavItem
+                                text={"Remove"}
+                                fontfamily={"tangerine"}
+                              />
+                            </Button>
+                          </Row>
+                        </Col>
+                      </Row>
                     </Col>
                   );
                 }
               }
             }
           })}
+        </Row>
+        <Row hidden={!hideCards} style={{ marginTop: 20 }}>
+          <Col
+            lg={12}
+            style={{
+              textAlign: "center",
+            }}
+          >
+            <Button
+              variant="outline-success"
+              style={{
+                width: 150,
+              }}
+            >
+              <span>
+                <FontAwesomeIcon icon={faShoppingCart} color={"#FFFFF"} />
+                <span style={{ paddingLeft: 5 }}>
+                  <GoogleFontNavItem
+                    text={"Order now"}
+                    fontfamily={"tangerine"}
+                  />
+                </span>
+              </span>
+            </Button>
+            <span
+              style={{ fontSize: 18, paddingLeft: 30, fontWeight: "bolder" }}
+            >
+              <GoogleFontNavItem
+                text={"Your cart is ready !"}
+                fontfamily={"vibes"}
+              />
+            </span>
+          </Col>
         </Row>
         <Row hidden={hideCards}>
           {cards_data.map((data) => {

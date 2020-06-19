@@ -27,9 +27,12 @@ function Navigation({ history }) {
   const dispatch = useDispatch();
   // current value in the store //
   const key_selected = useSelector((state) => state.navbar); // check in the /reducers/index.js
+  const user_details = useSelector((state) => state.userSigning);
+  const selection = user_details.selection ? user_details.selection : [];
   //
   const { currentUser } = useContext(AuthContext);
   const [loginStatus, setLoginStatus] = useState("Login");
+  const [hideBadge, setHideBadge] = useState(true);
 
   const handleSelection = (key) => {
     switch (key) {
@@ -39,7 +42,13 @@ function Navigation({ history }) {
         break;
       case "key2":
         if (currentUser) {
-          getUserDetails(firebase.auth().currentUser.uid); // just to get user details when user might have reloaded the window but didn't sign out
+          if (user_details.selection) {
+            // when properties of user_details have has values we don't fetch them again because firestore updates in real time // onsnapshot
+            dispatch(navbar_selection_key2());
+            history.push("/services");
+          } else {
+            getUserDetails(firebase.auth().currentUser.uid); // just to get user details when user might have reloaded the window but didn't sign out // where the store was reset
+          }
         } else {
           dispatch(show_AddUserModal()); // do this action // tells the reducer which action to perform
         }
@@ -68,7 +77,7 @@ function Navigation({ history }) {
     } else {
       setLoginStatus("Login");
     }
-  }, [currentUser]); // [currentUser,...] // is the dependencyList meaning that useEffect() will activate only when values in the list change
+  }, [currentUser, selection]); // [currentUser,...] // is the dependencyList meaning that useEffect() will activate only when values in the list change
 
   const currentRoute = (path) => {
     if (location.pathname === path) {
@@ -126,6 +135,13 @@ function Navigation({ history }) {
     backgroundRepeat: "no-repeat",
     height: 70,
     width: 70,
+  };
+
+  const check_selection_size = () => {
+    if (selection.length > 0) {
+      setHideBadge(false);
+    }
+    setHideBadge(true);
   };
 
   return (
@@ -203,6 +219,12 @@ function Navigation({ history }) {
                   text={"Products & Services"}
                   fontfamily={project().nav_item_font}
                 />
+                <span
+                  class="badge badge-info"
+                  style={{ marginLeft: 4, borderRadius: "50%" }}
+                >
+                  {selection.length}
+                </span>
               </HoverSpan>
             </Nav.Link>
             <Nav.Link eventKey="key3">

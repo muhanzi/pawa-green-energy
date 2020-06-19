@@ -144,6 +144,7 @@ const LoginAndSignUp = ({ history }) => {
       await firebase
         .auth()
         .createUserWithEmailAndPassword(addEmail, addPassword);
+      //firebase.auth().sendSignInLinkToEmail(addEmail);
       saveUserDetails({
         id: firebase.auth().currentUser.uid,
         name: addFirstName + " " + addLastName,
