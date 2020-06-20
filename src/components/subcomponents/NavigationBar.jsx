@@ -105,17 +105,34 @@ function Navigation({ history }) {
       .firestore()
       .collection("users")
       .doc(id)
+      .get()
+      .then((user_data) => {
+        if (user_data.exists) {
+          dispatch(user_signed_in(user_data.data()));
+          dispatch(navbar_selection_key2());
+          history.push("/services");
+          user_data_changed(user_data.data().id); // just to maintain a snapshot // in case data changes
+        } else {
+          // if user data do not exists in our user collection // we sign him out
+          firebase.auth().signOut();
+          dispatch(user_signed_out());
+          dispatch(show_AddUserModal());
+        }
+      })
+      .catch((error) => {
+        alert("An Error ocurred! Try again later");
+      });
+  };
+
+  const user_data_changed = (id) => {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(id)
       .onSnapshot((snapshot) => {
         const user = snapshot.data();
         if (user) {
           dispatch(user_signed_in(user));
-          dispatch(navbar_selection_key2());
-          history.push("/services");
-        } else {
-          // if we cannot get user details // we ask user to login again
-          firebase.auth().signOut();
-          dispatch(user_signed_out());
-          dispatch(show_AddUserModal());
         }
       });
   };

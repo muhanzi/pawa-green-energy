@@ -193,21 +193,39 @@ const LoginAndSignUp = ({ history }) => {
       .firestore()
       .collection("users")
       .doc(id)
-      .onSnapshot((snapshot) => {
-        const user = snapshot.data();
-        if (user) {
-          dispatch(user_signed_in(user));
+      .get()
+      .then((user_data) => {
+        if (user_data.exists) {
+          dispatch(user_signed_in(user_data.data()));
           setHiddenLoginLinearDeterminate(true);
           history.push("/services");
           dispatch(navbar_selection_key2());
           emptySignInForm();
           hideAddUserModal();
+          user_data_changed(user_data.data().id); // just to maintain a snapshot // in case data changes
         } else {
-          // if we cannot get user details // we ask user to login again
+          // if user data do not exists in our user collection // we sign him out
           firebase.auth().signOut();
           dispatch(user_signed_out());
           setHiddenLoginLinearDeterminate(true);
           $("#loginWarningTextId").html("sign in failed! Try again");
+        }
+      })
+      .catch((error) => {
+        setHiddenLoginLinearDeterminate(true);
+        $("#loginWarningTextId").html("sign in failed! Try again");
+      });
+  };
+
+  const user_data_changed = (id) => {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(id)
+      .onSnapshot((snapshot) => {
+        const user = snapshot.data();
+        if (user) {
+          dispatch(user_signed_in(user));
         }
       });
   };
