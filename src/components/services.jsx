@@ -3,7 +3,8 @@ import firebase from "../firebase.js";
 import { useEffect } from "react";
 import FooterList from "./subcomponents/footerList";
 import project from "./subcomponents/static";
-import { Container, Row, Col, Image, Button } from "react-bootstrap";
+import { Container, Row, Col, Image, Button, Modal } from "react-bootstrap";
+import { MDBBtn } from "mdbreact";
 import Card from "./subcomponents/card";
 import image3 from "../pictures/image3.jpg";
 import sws from "../pictures/sws.jpg";
@@ -18,7 +19,9 @@ import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShoppingCart, faGift } from "@fortawesome/free-solid-svg-icons";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import RemoveProduct from "./subcomponents/RemoveProductButton.jsx";
+import projectStyles from "./subcomponents/styles/Styles.js";
 
 function Services() {
   /*
@@ -51,6 +54,7 @@ function Services() {
   const user_details = useSelector((state) => state.userSigning);
   const selection = user_details.selection ? user_details.selection : [];
   const [hideCards, setHideCards] = useState(true);
+  const [orderModal, setOrderModal] = useState(false);
 
   const cards_data = [
     {
@@ -194,8 +198,6 @@ function Services() {
     },
   ];
 
-  const product_selected = (product_title) => {};
-
   const check_Autocomplete_width = () => {
     if (window.screen.availWidth < 500) {
       return 200;
@@ -215,6 +217,25 @@ function Services() {
     }
   }, [user_details.selection]);
 
+  const product_selected = (product_title) => {
+    if (user_details.id) {
+      user_details.selection.push(product_title);
+      updateFirestore(user_details.selection, user_details.id);
+    }
+  };
+
+  const updateFirestore = async (selection, id) => {
+    try {
+      await firebase
+        .firestore()
+        .collection("users")
+        .doc(id)
+        .update({ selection: selection }); // onsnapshot() will update values in the redux store
+    } catch (error) {
+      alert("An Error occurred! try again");
+    }
+  };
+
   const check_column_paddingleft = () => {
     // those 2 columns // each one has minimum width of 200 // so the two columns can only show together if screen width is equal or greater than 400
     if (window.screen.availWidth < 400) {
@@ -229,6 +250,26 @@ function Services() {
       return "left";
     }
     return "center";
+  };
+
+  const check_fontsize = () => {
+    if (window.screen.availWidth <= 360) {
+      return 15;
+    }
+    return 18;
+  };
+
+  const showOrderModal = () => {
+    setOrderModal(true);
+  };
+
+  const hideOrderModal = () => {
+    setOrderModal(false);
+  };
+
+  const confirmOrder = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
   };
 
   return (
@@ -261,10 +302,11 @@ function Services() {
             <Autocomplete
               id="select"
               options={select_products}
-              getOptionLabel={(option) => option.description} // is like a forEach to fill the select tag options
-              onChange={(event, value) => {
-                if (value) {
-                  product_selected(value.title);
+              getOptionLabel={(product) => product.description} // is like a forEach to fill the select tag options
+              onChange={(event, product) => {
+                // if an object is selected
+                if (product) {
+                  product_selected(product.title);
                 }
               }}
               style={{ width: check_Autocomplete_width() }}
@@ -344,18 +386,7 @@ function Services() {
                             />
                           </Row>
                           <Row style={{ fontSize: 17, paddingTop: 10 }}>
-                            <Button
-                              variant="outline-success"
-                              style={{
-                                backgroundColor: "#FFFFF",
-                                marginTop: 2,
-                              }}
-                            >
-                              <GoogleFontNavItem
-                                text={"Remove"}
-                                fontfamily={"tangerine"}
-                              />
-                            </Button>
+                            <RemoveProduct product={service.title} />
                           </Row>
                         </Col>
                       </Row>
@@ -378,6 +409,7 @@ function Services() {
               style={{
                 width: 150,
               }}
+              onClick={showOrderModal}
             >
               <span>
                 <FontAwesomeIcon icon={faShoppingCart} color={"#FFFFF"} />
@@ -390,7 +422,11 @@ function Services() {
               </span>
             </Button>
             <span
-              style={{ fontSize: 18, paddingLeft: 30, fontWeight: "bolder" }}
+              style={{
+                fontSize: check_fontsize(),
+                paddingLeft: 20,
+                fontWeight: "bolder",
+              }}
             >
               <GoogleFontNavItem
                 text={"Your cart is ready !"}
@@ -415,6 +451,87 @@ function Services() {
         </Row>
       </Container>
       <FooterList />
+      {/* ---popup window--- */}
+
+      <Modal
+        show={orderModal}
+        onHide={hideOrderModal} // when the closeButton 'X'  is clicked
+        centered
+      >
+        <form onSubmit={confirmOrder}>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              <span
+                style={projectStyles().spanStyle2}
+                className="badge badge m-2"
+              >
+                Confirm Order
+              </span>
+            </Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <p>
+              {/* <FormGroup>
+                <FloatingLabelInput
+                  id="LoginEmailId"
+                  label={"Email"}
+                  type="email"
+                  onBlur=""
+                  name="email"
+                  value={email}
+                  onChange={handleChangeEmail}
+                  style={{ fontSize: 15, fontFamilly: "sans-serif" }}
+                />
+              </FormGroup>
+              <FormGroup>
+                <FloatingLabelInput
+                  id="LoginPasswordId"
+                  label={"Password"}
+                  onBlur=""
+                  type="password"
+                  name="Password"
+                  value={password}
+                  onChange={handleChangePassword}
+                  style={{ fontSize: 15 }}
+                />
+              </FormGroup>
+              Don't have an account ?{" "}
+              <a
+                href="#"
+                style={{ color: project().projectColor }}
+                onClick={showSignUp}
+              >
+                Register
+              </a>
+              <FormGroup
+                style={{ paddingTop: 20 }}
+                hidden={hiddenLoginLinearDeterminate}
+              >
+                <LinearDeterminate />
+              </FormGroup>
+              <FormGroup>
+                <span className="text-danger" id="loginWarningTextId"></span>
+              </FormGroup> */}
+            </p>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="secondary" onClick={hideOrderModal}>
+              Cancel
+            </Button>
+            <MDBBtn
+              className="btn-success"
+              style={projectStyles().buttonStyle}
+              //disabled={!validateFormLogin()}
+              type="submit"
+            >
+              confirm
+            </MDBBtn>
+          </Modal.Footer>
+        </form>
+      </Modal>
+      {/* ---popup window--- */}
     </div>
   );
 }

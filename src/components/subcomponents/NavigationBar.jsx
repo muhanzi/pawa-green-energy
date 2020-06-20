@@ -47,7 +47,7 @@ function Navigation({ history }) {
             dispatch(navbar_selection_key2());
             history.push("/services");
           } else {
-            getUserDetails(firebase.auth().currentUser.uid); // just to get user details when user might have reloaded the window but didn't sign out // where the store was reset
+            getUserDetails(firebase.auth().currentUser.uid); // just to get user details when user might have reloaded the window but didn't sign out // when the store was reset
           }
         } else {
           dispatch(show_AddUserModal()); // do this action // tells the reducer which action to perform
