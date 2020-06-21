@@ -3,7 +3,15 @@ import firebase from "../firebase.js";
 import { useEffect } from "react";
 import FooterList from "./subcomponents/footerList";
 import project from "./subcomponents/static";
-import { Container, Row, Col, Image, Button, Modal } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Image,
+  Button,
+  Modal,
+  FormGroup,
+} from "react-bootstrap";
 import { MDBBtn } from "mdbreact";
 import Card from "./subcomponents/card";
 import image3 from "../pictures/image3.jpg";
@@ -14,14 +22,27 @@ import sps from "../pictures/sps.jpg";
 import epe from "../pictures/epe.jpg";
 import crs from "../pictures/crs.jpg";
 import sab from "../pictures/sab.jpg";
+import cash from "../pictures/cash.jpg";
+import debitcard from "../pictures/card.jpg";
+import mobilemoney from "../pictures/mobilemoney.jpg";
 import GoogleFontNavItem from "./subcomponents/fonts/googleFontForNavItems";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import { makeStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faShoppingCart,
+  faUserCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import RemoveProduct from "./subcomponents/RemoveProductButton.jsx";
 import projectStyles from "./subcomponents/styles/Styles.js";
+import FloatingLabelInput from "react-floating-label-input";
+import $ from "jquery";
+import LinearDeterminate from "./subcomponents/linearProgressBar.js";
 
 function Services() {
   /*
@@ -55,6 +76,24 @@ function Services() {
   const selection = user_details.selection ? user_details.selection : [];
   const [hideCards, setHideCards] = useState(true);
   const [orderModal, setOrderModal] = useState(false);
+  const [total, setTotal] = useState(0);
+  const [address, setAddress] = useState(
+    user_details.address ? user_details.address : ""
+  );
+  const [paymentMode, setPaymentMode] = React.useState(0);
+  const [cashMode, setCashMode] = React.useState(false);
+  const [debitCardMode, setDebitCardMode] = React.useState(false);
+  const [mobileMoneyMode, setMobileMoneyMode] = React.useState(false);
+  const [hiddenLinearDeterminate, setHiddenLinearDeterminate] = useState(true);
+
+  const useStyles = makeStyles({
+    root: {
+      flexGrow: 1,
+      maxWidth: 500,
+    },
+  });
+
+  const classes = useStyles();
 
   const cards_data = [
     {
@@ -215,7 +254,23 @@ function Services() {
     } else {
       setHideCards(false);
     }
-  }, [user_details.selection]);
+    //
+    let total_price = 0;
+    selection.map((selected_product) => {
+      if (user_details.selection) {
+        if (user_details.selection.length > 0) {
+          let product_results = select_products.find(
+            (product) => product.title === selected_product
+          ); // if it does not find any matching object in the array // product_results will be undefined
+          if (product_results) {
+            total_price =
+              total_price + Number.parseFloat(product_results.price);
+          }
+        }
+      }
+    });
+    setTotal(total_price);
+  }, [user_details.selection, selection, select_products]);
 
   const product_selected = (product_title) => {
     if (user_details.id) {
@@ -232,7 +287,7 @@ function Services() {
         .doc(id)
         .update({ selection: selection }); // onsnapshot() will update values in the redux store
     } catch (error) {
-      alert("An Error occurred! try again");
+      alert("A Network Error occurred! try again");
     }
   };
 
@@ -267,9 +322,122 @@ function Services() {
     setOrderModal(false);
   };
 
-  const confirmOrder = (event) => {
+  const confirmOrder = async (event) => {
     event.preventDefault();
     event.stopPropagation();
+    setHiddenLinearDeterminate(false);
+    // check if selection length is greater than 0
+    if (user_details.selection) {
+      if (selection.length > 0) {
+        try {
+          await selection.map((selectionProduct) => {
+            saveOrder({
+              customer: user_details.id,
+              product: selectionProduct,
+              address: address,
+              paymentMode: getpaymentMethod(),
+              date: new Date(),
+            });
+          });
+          updateUserSelection(user_details.id, address);
+        } catch (error) {
+          setHiddenLinearDeterminate(true);
+          $("#WarningTextId").html("A Network Error occurres! Try again");
+        }
+      } else {
+        setHiddenLinearDeterminate(true);
+        $("#WarningTextId").html("No item selected!");
+      }
+    } else {
+      setHiddenLinearDeterminate(true);
+      $("#WarningTextId").html("A Error occurred! Try again");
+    }
+    // save orders // empty the selection array and update address at the same time // thank the user
+  };
+
+  const saveOrder = async (order) => {
+    try {
+      await firebase.firestore().collection("orders").add(order);
+    } catch (error) {
+      setHiddenLinearDeterminate(true);
+      $("#WarningTextId").html("A Network Error occurres! Try again");
+    }
+  };
+
+  const updateUserSelection = async (id, address) => {
+    try {
+      await firebase
+        .firestore()
+        .collection("users")
+        .doc(id)
+        .update({ selection: [], address: address }); // onsnapshot() will update values in the redux store
+      setHiddenLinearDeterminate(true);
+      $("#SuccessTextId").html(
+        "Your order was processed successfully. Thank you for choosing PawaGreen Energy!"
+      );
+      $("#SuccessTextId").css("color", "#1D8348");
+    } catch (error) {
+      alert("A Network Error occurred! try again");
+    }
+  };
+
+  const getpaymentMethod = () => {
+    if (cashMode) {
+      return "cash_mode";
+    } else if (mobileMoneyMode) {
+      return "mobile_money_mode";
+    } else if (debitCardMode) {
+      return "debit_card_mode";
+    } else {
+      return "none";
+    }
+  };
+
+  const handleChangeAddress = (event) => {
+    if (!hiddenLinearDeterminate) {
+      return; // meaning the orders are being processed
+    }
+    setAddress(event.target.value);
+  };
+
+  const handleChangePaymentMode = (event, mode) => {
+    if (!hiddenLinearDeterminate) {
+      return; // meaning the orders are being processed
+    }
+    setPaymentMode(mode); // 0 --> cash // 1 --> mobile money // 2 --> debit card
+    switch (mode) {
+      case 0:
+        setCashMode(true);
+        setMobileMoneyMode(false);
+        setDebitCardMode(false);
+        break;
+      case 1:
+        setMobileMoneyMode(true);
+        setCashMode(false);
+        setDebitCardMode(false);
+        break;
+      case 2:
+        setDebitCardMode(true);
+        setMobileMoneyMode(false);
+        setCashMode(false);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const validateFormConfirmOrder = () => {
+    if (address.trim().length < 1) {
+      return false;
+    } else if (!cashMode) {
+      return false; // just for now as only cash on delivery is working
+    } else if (!hiddenLinearDeterminate) {
+      return false; // to prevent user from clicking many times // after the first click
+    } else if (selection.length < 1) {
+      return false; // after orders were processed successfully // user might click again but selection will be empty
+    } else {
+      return true;
+    }
   };
 
   return (
@@ -282,7 +450,20 @@ function Services() {
           paddingBottom: 30,
         }}
       >
-        <Row style={{ paddingTop: 20, paddingBottom: 20 }}>
+        <Row style={{ paddingTop: 10 }}>
+          <Col lg={12} style={{ textAlign: "left" }}>
+            <span>
+              <FontAwesomeIcon icon={faUserCircle} color={"#000000"} />
+            </span>
+            <span style={{ paddingLeft: 4, color: "black" }}>
+              <GoogleFontNavItem
+                text={user_details.name}
+                fontfamily={"labelle"}
+              />
+            </span>
+          </Col>
+        </Row>
+        <Row style={{ paddingTop: 10, paddingBottom: 20 }}>
           <Col
             style={{
               display: "flex",
@@ -378,9 +559,10 @@ function Services() {
                           <Row style={{ fontSize: 17, paddingTop: 10 }}>
                             <GoogleFontNavItem
                               text={
+                                "UGX " +
                                 Number.parseFloat(
                                   service.price
-                                ).toLocaleString() + " ugx"
+                                ).toLocaleString()
                               }
                               fontfamily={"tangerine"}
                             />
@@ -465,68 +647,253 @@ function Services() {
                 style={projectStyles().spanStyle2}
                 className="badge badge m-2"
               >
-                Confirm Order
+                <GoogleFontNavItem
+                  text={"Your Order (" + selection.length + " items)"}
+                  fontfamily={"tangerine"}
+                />
               </span>
             </Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
             <p>
-              {/* <FormGroup>
-                <FloatingLabelInput
-                  id="LoginEmailId"
-                  label={"Email"}
-                  type="email"
-                  onBlur=""
-                  name="email"
-                  value={email}
-                  onChange={handleChangeEmail}
-                  style={{ fontSize: 15, fontFamilly: "sans-serif" }}
-                />
-              </FormGroup>
-              <FormGroup>
-                <FloatingLabelInput
-                  id="LoginPasswordId"
-                  label={"Password"}
-                  onBlur=""
-                  type="password"
-                  name="Password"
-                  value={password}
-                  onChange={handleChangePassword}
-                  style={{ fontSize: 15 }}
-                />
-              </FormGroup>
-              Don't have an account ?{" "}
-              <a
-                href="#"
-                style={{ color: project().projectColor }}
-                onClick={showSignUp}
-              >
-                Register
-              </a>
-              <FormGroup
-                style={{ paddingTop: 20 }}
-                hidden={hiddenLoginLinearDeterminate}
-              >
-                <LinearDeterminate />
-              </FormGroup>
-              <FormGroup>
-                <span className="text-danger" id="loginWarningTextId"></span>
-              </FormGroup> */}
+              <Row style={{ paddingBottom: 5 }}>
+                <Col>
+                  <span
+                    style={{
+                      textAlign: "left",
+                      color: project().projectColor,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <GoogleFontNavItem
+                      text={"Address Details"}
+                      fontfamily={"tangerine"}
+                    />
+                  </span>
+                </Col>
+              </Row>
+              <Row style={{ paddingBottom: 0 }}>
+                <Col>
+                  <FormGroup>
+                    <FloatingLabelInput
+                      id="AddressId"
+                      label={"address"}
+                      type="address"
+                      onBlur=""
+                      value={address}
+                      onChange={handleChangeAddress}
+                      style={{
+                        fontSize: 15,
+                        fontFamilly: "sans-serif",
+                      }}
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row style={{ paddingBottom: 5 }}>
+                <Col>
+                  <span
+                    style={{
+                      textAlign: "left",
+                      color: project().projectColor,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <GoogleFontNavItem
+                      text={"Payment Method"}
+                      fontfamily={"tangerine"}
+                    />
+                  </span>
+                </Col>
+              </Row>
+              <Row style={{ paddingBottom: 20 }}>
+                {/* <Col>Cash on Delivery</Col>
+                <Col>Mobile Money</Col>
+                <Col>Debit Card</Col> */}
+                <Col>
+                  <Paper square className={classes.root} variant="outlined">
+                    <Tabs
+                      value={paymentMode}
+                      onChange={handleChangePaymentMode}
+                      variant="standard"
+                      indicatorColor={project().projectColor}
+                      textColor={project().projectColor}
+                      aria-label="icon tabs example"
+                    >
+                      <Tab label="Cash on Delivery" />
+                      <Tab label="Mobile Money" />
+                      <Tab label="Debit Card" />
+                    </Tabs>
+                  </Paper>
+                  <Row
+                    hidden={!cashMode}
+                    style={{
+                      paddingTop: 10,
+                      paddingLeft: 5,
+                      paddingBottom: 5,
+                      paddingRight: 5,
+                    }}
+                  >
+                    <Col>
+                      <Image
+                        fluid
+                        src={cash}
+                        alt="Image Loading..."
+                        style={{
+                          height: "40px",
+                          width: "80px",
+                        }}
+                      />
+                      <span>
+                        <span
+                          style={{
+                            color: "black",
+                            paddingLeft: 10,
+                          }}
+                        >
+                          <GoogleFontNavItem
+                            text={
+                              "You will pay after delivery and installation"
+                            }
+                            fontfamily={"tangerine"}
+                          />
+                        </span>
+                      </span>
+                    </Col>
+                  </Row>
+                  <Row
+                    hidden={!mobileMoneyMode}
+                    style={{
+                      paddingTop: 10,
+                      paddingLeft: 5,
+                      paddingBottom: 5,
+                      paddingRight: 5,
+                    }}
+                  >
+                    <Col>
+                      <Image
+                        fluid
+                        src={mobilemoney}
+                        alt="Image Loading..."
+                        style={{
+                          height: "40px",
+                          width: "80px",
+                        }}
+                      />
+                      <span>
+                        <span
+                          style={{
+                            color: "black",
+                            paddingLeft: 10,
+                          }}
+                        >
+                          <GoogleFontNavItem
+                            text={
+                              "This option will be available soon. Use cash on delivery!"
+                            }
+                            fontfamily={"tangerine"}
+                          />
+                        </span>
+                      </span>
+                    </Col>
+                  </Row>
+                  <Row
+                    hidden={!debitCardMode}
+                    style={{
+                      paddingTop: 10,
+                      paddingLeft: 5,
+                      paddingBottom: 5,
+                      paddingRight: 5,
+                    }}
+                  >
+                    <Col>
+                      <Image
+                        fluid
+                        src={debitcard}
+                        alt="Image Loading..."
+                        style={{
+                          height: "40px",
+                          width: "80px",
+                        }}
+                      />
+                      <span>
+                        <span
+                          style={{
+                            color: "black",
+                            paddingLeft: 10,
+                          }}
+                        >
+                          <GoogleFontNavItem
+                            text={
+                              "This option will be available soon. Use cash on delivery!"
+                            }
+                            fontfamily={"tangerine"}
+                          />
+                        </span>
+                      </span>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <span
+                    style={{
+                      textAlign: "left",
+                      color: "black",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <GoogleFontNavItem
+                      text={"Total"}
+                      fontfamily={"tangerine"}
+                    />
+                  </span>
+                </Col>
+                <Col>
+                  <span
+                    style={{
+                      textAlign: "right",
+                      color: "black",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <GoogleFontNavItem
+                      text={"UGX " + total.toLocaleString()}
+                      fontfamily={"tangerine"}
+                    />
+                  </span>
+                </Col>
+              </Row>
+              <Row hidden={hiddenLinearDeterminate}>
+                <Col>
+                  <LinearDeterminate />
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <span className="text-danger" id="WarningTextId"></span>
+                  <span id="SuccessTextId"></span>
+                </Col>
+              </Row>
             </p>
           </Modal.Body>
 
           <Modal.Footer>
             <Button variant="secondary" onClick={hideOrderModal}>
-              Cancel
+              <GoogleFontNavItem text={"cancel"} fontfamily={"tangerine"} />
             </Button>
             <MDBBtn
               className="btn-success"
               style={projectStyles().buttonStyle}
-              //disabled={!validateFormLogin()}
+              disabled={!validateFormConfirmOrder()}
               type="submit"
             >
-              confirm
+              <GoogleFontNavItem
+                text={"confirm order"}
+                fontfamily={"tangerine"}
+              />
             </MDBBtn>
           </Modal.Footer>
         </form>

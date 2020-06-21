@@ -88,12 +88,7 @@ function Navigation({ history }) {
   const currentRoute = (path) => {
     if (location.pathname === path) {
       return {
-        color: "white",
-        cursor: "pointer",
-        backgroundColor: project().projectColor,
-        fontWeight: "bold",
-        borderRadius: "4px 4px",
-        padding: "8px",
+        borderBottom: "1px solid " + project().projectColor,
       };
     } else {
       return {};
@@ -120,7 +115,7 @@ function Navigation({ history }) {
         }
       })
       .catch((error) => {
-        alert("An Error ocurred! Try again later");
+        alert("A Network Error ocurred! Try again later");
       });
   };
 
@@ -142,12 +137,7 @@ function Navigation({ history }) {
     font-weight: bold;
     padding: 8px;
     :hover {
-      color: white;
-      cursor: pointer;
-      background-color: #1d8348;
-      font-weight: bold;
-      border-radius: 4px 4px;
-      padding: 8px;
+      border-bottom: 1px solid #1d8348;
     }
   `; // styled-components library helps us to style html elements
 

@@ -150,7 +150,7 @@ const LoginAndSignUp = ({ history }) => {
         name: addFirstName + " " + addLastName,
         phone: addPhoneNumber,
         email: addEmail,
-        address: "empty",
+        address: "",
         role: "customer",
         selection: [],
       });

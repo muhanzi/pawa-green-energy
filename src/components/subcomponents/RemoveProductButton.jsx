@@ -36,7 +36,7 @@ const RemoveProduct = (props) => {
       .doc(user_id)
       .update({ selection: selection })
       .catch((error) => {
-        alert("An Error occurred! try again");
+        alert("A Network Error occurred! try again");
       }); // onsnapshot() will update values in the redux store
   };
 

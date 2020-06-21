@@ -93,7 +93,7 @@ function Card(props) {
               user_data_changed(user_data.data().id); // just to maintain a snapshot // when page was reloaded but user didn't logout
             })
             .catch((error) => {
-              alert("An Error occurred! try again"); // failed to update the selection
+              alert("A Network Error occurred! try again"); // failed to update the selection
             });
         } else {
           // if user details do net exist // we ask user to login again
@@ -103,7 +103,7 @@ function Card(props) {
         }
       })
       .catch((error) => {
-        alert("An Error occurred! try again");
+        alert("A Network Error occurred! try again");
       });
   };
 
@@ -128,7 +128,7 @@ function Card(props) {
         .doc(id)
         .update({ selection: selection }); // onsnapshot() will update values in the redux store
     } catch (error) {
-      alert("An Error occurred! try again");
+      alert("A Network Error occurred! try again");
     }
   };
 
