@@ -35,10 +35,9 @@ function FooterList() {
             dm={3}
             style={{
               margin: "auto",
-              textAlign: "center",
               marginBottom: 15,
-              minWidth: 250,
-            }}
+              minWidth: 270,
+            }} // minWidth: 270 --> location text will scale better on small devices // screen width < 360
           >
             <Row style={{ marginBottom: 15, fontSize: 20, fontWeight: "bold" }}>
               <GoogleFontNavItem text={"Contact us"} fontfamily={"tangerine"} />
@@ -109,7 +108,6 @@ function FooterList() {
             dm={3}
             style={{
               margin: "auto",
-              textAlign: "center",
               marginBottom: 15,
               minWidth: 250,
             }}
@@ -198,7 +196,6 @@ function FooterList() {
             dm={3}
             style={{
               margin: "auto",
-              textAlign: "center",
               marginBottom: 15,
               minWidth: 250,
             }}
@@ -223,12 +220,13 @@ function FooterList() {
             dm={3}
             style={{
               margin: "auto",
-              textAlign: "center",
               marginBottom: 15,
               minWidth: 250,
             }}
           >
-            <Row style={{ marginBottom: 15 }}></Row>
+            <Row style={{ marginBottom: 15, fontSize: 20, fontWeight: "bold" }}>
+              <GoogleFontNavItem text={"Services"} fontfamily={"tangerine"} />
+            </Row>
             <Row>
               <GoogleFontNavItem text={"PGE-SAB"} fontfamily={"tangerine"} />
             </Row>

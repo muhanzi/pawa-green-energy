@@ -61,6 +61,12 @@ function Card(props) {
   const updateUserSelection = (selected_product) => {
     if (currentUser) {
       if (user_details.selection) {
+        if (user_details.role === "admin") {
+          alert(
+            "This user cannot order any product! An administrator cannot perform this operation"
+          );
+          return;
+        }
         // update user selection
         user_details.selection.push(selected_product);
         updateFirestore(user_details.selection, user_details.id);
@@ -82,6 +88,13 @@ function Card(props) {
       .get()
       .then((user_data) => {
         if (user_data.exists) {
+          if (user_data.data().role === "admin") {
+            firebase.auth().signOut(); // an admin must login again after the page was reloaded
+            alert(
+              "This user cannot order any product! An administrator cannot perform this operation."
+            );
+            return;
+          }
           const products_selection = user_data.data().selection;
           products_selection.push(selected_product);
           firebase

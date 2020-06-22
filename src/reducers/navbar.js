@@ -9,6 +9,9 @@ const navbar_selection_reducer = (state = "key1", action) => {
     case "KEY3_SELECTED":
       state = "key3";
       return state;
+    case "KEY4_SELECTED":
+      state = "key4";
+      return state;
     default:
       return state;
   }

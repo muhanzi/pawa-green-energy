@@ -428,6 +428,7 @@ function Services() {
 
   const validateFormConfirmOrder = () => {
     if (address.trim().length < 1) {
+      $("#WarningTextId").html("address is required !");
       return false;
     } else if (!cashMode) {
       return false; // just for now as only cash on delivery is working
@@ -436,6 +437,7 @@ function Services() {
     } else if (selection.length < 1) {
       return false; // after orders were processed successfully // user might click again but selection will be empty
     } else {
+      $("#WarningTextId").html("");
       return true;
     }
   };
@@ -530,6 +532,7 @@ function Services() {
                             style={{
                               height: "200px",
                               width: "200px",
+                              borderRadius: 6,
                             }}
                           />
                         </Col>
@@ -716,7 +719,7 @@ function Services() {
                     <Tabs
                       value={paymentMode}
                       onChange={handleChangePaymentMode}
-                      variant="standard"
+                      variant="scrollable"
                       indicatorColor={project().projectColor}
                       textColor={project().projectColor}
                       aria-label="icon tabs example"

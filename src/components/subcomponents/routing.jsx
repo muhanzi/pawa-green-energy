@@ -7,6 +7,7 @@ import About from "../about";
 import { PrivateRoute } from "../../firebase authentication/privateRoute";
 import Navigation from "./NavigationBar";
 import MyFooter from "./footer";
+import Administration from "../administration";
 
 const MyRoutes = () => {
   return (
@@ -16,6 +17,7 @@ const MyRoutes = () => {
         <Route exact path="/" component={Home} />
         {/* protected route // to access /services user must be logged in */}
         <PrivateRoute exact path="/services" component={Services} />
+        <Route exact path="/administration" component={Administration} />
         <Route exact path="/about" component={About} />
         <Route component={WrongUrl} />
       </Switch>

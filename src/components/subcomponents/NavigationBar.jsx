@@ -9,8 +9,10 @@ import {
   navbar_selection_key1,
   navbar_selection_key2,
   navbar_selection_key3,
+  navbar_selection_key4,
   user_signed_out,
   user_signed_in,
+  show_products_nav_item,
 } from "../../actions";
 import ContactBar from "./contactBar";
 import styled from "styled-components";
@@ -28,11 +30,14 @@ function Navigation({ history }) {
   // current value in the store //
   const key_selected = useSelector((state) => state.navbar); // check in the /reducers/index.js
   const user_details = useSelector((state) => state.userSigning);
+  const hideProductsNavItem = useSelector((state) => state.productsNavItem);
   const selection = user_details.selection ? user_details.selection : [];
+  const user_role = user_details.role ? user_details.role : "";
   //
   const { currentUser } = useContext(AuthContext);
   const [loginStatus, setLoginStatus] = useState("Login");
   const [hideBadge, setHideBadge] = useState(true);
+  const [hideAdminNavItem, setHideAdminNavItem] = useState(true);
 
   const handleSelection = (key) => {
     switch (key) {
@@ -54,13 +59,26 @@ function Navigation({ history }) {
         }
         break;
       case "key3":
-        history.push("/about");
-        dispatch(navbar_selection_key3());
+        if (currentUser) {
+          if (user_details.role) {
+            if (user_details.role === "admin") {
+              dispatch(navbar_selection_key3());
+              history.push("/administration");
+            } // admin user data will always be present if // key3 is clicked
+          }
+        } else {
+          dispatch(show_AddUserModal()); // do this action // tells the reducer which action to perform
+        }
         break;
       case "key4":
+        history.push("/about");
+        dispatch(navbar_selection_key4());
+        break;
+      case "key5":
         if (currentUser) {
           firebase.auth().signOut();
           dispatch(user_signed_out());
+          dispatch(show_products_nav_item()); // in case user was an admin // now we show products nav item
         } else {
           dispatch(show_AddUserModal()); // do this action // tells the reducer which action to perform
         }
@@ -83,7 +101,13 @@ function Navigation({ history }) {
     } else {
       setHideBadge(true);
     }
-  }, [currentUser, selection]); // [currentUser,...] // is the dependencyList meaning that useEffect() will activate only when values in the list change
+    //
+    if (user_role === "admin") {
+      setHideAdminNavItem(false);
+    } else {
+      setHideAdminNavItem(true);
+    }
+  }, [currentUser, selection, user_role]); // [currentUser,...] // is the dependencyList meaning that useEffect() will activate only when values in the list change
 
   const currentRoute = (path) => {
     if (location.pathname === path) {
@@ -103,10 +127,17 @@ function Navigation({ history }) {
       .get()
       .then((user_data) => {
         if (user_data.exists) {
-          dispatch(user_signed_in(user_data.data()));
-          dispatch(navbar_selection_key2());
-          history.push("/services");
-          user_data_changed(user_data.data().id); // just to maintain a snapshot // in case data changes
+          if (user_data.data().role === "admin") {
+            // after the site was reloaded // an Administrator must sign in again // for security // and this will enable us to separate customer from administrator
+            firebase.auth().signOut();
+            dispatch(user_signed_out());
+            dispatch(show_AddUserModal());
+          } else {
+            dispatch(user_signed_in(user_data.data()));
+            dispatch(navbar_selection_key2());
+            history.push("/services");
+            user_data_changed(user_data.data().id); // just to maintain a snapshot // in case data changes
+          }
         } else {
           // if user data do not exists in our user collection // we sign him out
           firebase.auth().signOut();
@@ -202,6 +233,7 @@ function Navigation({ history }) {
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls="responsive-navbar-nav"
+          className="ml-auto"
           style={{
             backgroundColor: project().projectColor,
           }}
@@ -219,7 +251,7 @@ function Navigation({ history }) {
                 />
               </HoverSpan>
             </Nav.Link>
-            <Nav.Link eventKey="key2">
+            <Nav.Link eventKey="key2" hidden={hideProductsNavItem}>
               <HoverSpan style={currentRoute("/services")}>
                 <GoogleFontNavItem
                   text={"Products & Services"}
@@ -236,7 +268,15 @@ function Navigation({ history }) {
                 </sup>
               </HoverSpan>
             </Nav.Link>
-            <Nav.Link eventKey="key3">
+            <Nav.Link eventKey="key3" hidden={hideAdminNavItem}>
+              <HoverSpan style={currentRoute("/administration")}>
+                <GoogleFontNavItem
+                  text={"Admin"}
+                  fontfamily={project().nav_item_font}
+                />
+              </HoverSpan>
+            </Nav.Link>
+            <Nav.Link eventKey="key4">
               <HoverSpan style={currentRoute("/about")}>
                 <GoogleFontNavItem
                   text={"About"}
@@ -244,7 +284,7 @@ function Navigation({ history }) {
                 />
               </HoverSpan>
             </Nav.Link>
-            <Nav.Link eventKey="key4">
+            <Nav.Link eventKey="key5">
               <HoverSpan>
                 <GoogleFontNavItem
                   text={loginStatus}

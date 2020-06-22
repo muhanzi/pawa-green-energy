@@ -11,6 +11,9 @@ export const navbar_selection_key2 = () => {
 export const navbar_selection_key3 = () => {
   return { type: "KEY3_SELECTED" };
 };
+export const navbar_selection_key4 = () => {
+  return { type: "KEY4_SELECTED" };
+};
 export const increment = (data) => {
   return { type: "INCREMENT", payload: data }; // payload has the data or parameter we want to pass to the reducer function which will manipulate it
 };
@@ -29,4 +32,10 @@ export const user_signed_in = (user) => {
 };
 export const user_signed_out = () => {
   return { type: "SIGNED_OUT" };
+};
+export const hide_products_nav_item = () => {
+  return { type: "HIDE" };
+};
+export const show_products_nav_item = () => {
+  return { type: "SHOW" };
 };
