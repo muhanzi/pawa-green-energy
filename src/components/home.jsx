@@ -1,27 +1,12 @@
 import React, { Component } from "react";
 import project from "./subcomponents/static";
 import Slider from "./subcomponents/slider";
-import {
-  Container,
-  Row,
-  Col,
-  Modal,
-  Button,
-  FormGroup,
-  Image,
-} from "react-bootstrap";
-import {
-  MDBContainer,
-  MDBDataTable,
-  MDBBtn,
-  MDBTable,
-  MDBTableBody,
-} from "mdbreact";
+import { Container, Row, Col, Modal, FormGroup, Image } from "react-bootstrap";
+import { MDBBtn, MDBTable, MDBTableBody } from "mdbreact";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import FloatingLabelInput from "react-floating-label-input";
 import $ from "jquery";
-import { Checkbox, withStyles, FormControlLabel } from "@material-ui/core";
 import Card from "./subcomponents/card";
 import image3 from "../pictures/image3.jpg";
 import sws from "../pictures/sws.jpg";
@@ -70,7 +55,6 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    this.check_width();
     this.retrieveFromFirestore();
   }
 
@@ -472,19 +456,27 @@ class Home extends Component {
     { picture: aream, link: "https://www.aream.de/" },
   ];
 
-  check_width = () => {
-    if (window.screen.availWidth < 500) {
-      this.setState({ is_small_device: true });
-    } else {
-      this.setState({ is_small_device: false });
-    }
-  };
-
   check_width_size() {
-    if (this.state.is_small_device) {
-      return "100%"; // for small platforms (phones)
+    if (window.screen.availWidth < 500) {
+      $(window).on("orientationchange", function (event) {
+        //this.console.log("availWidth : " + window.screen.availWidth);
+        if (window.screen.availWidth < 500) {
+          return "100%";
+        } else {
+          return 400;
+        }
+      });
+      return "100%";
     } else {
-      return 400; // for big platforms (computers,ipads,...)
+      $(window).on("orientationchange", function (event) {
+        //this.console.log("availWidth : " + window.screen.availWidth);
+        if (window.screen.availWidth < 500) {
+          return "100%";
+        } else {
+          return 400;
+        }
+      });
+      return 400;
     }
   }
 

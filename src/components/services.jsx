@@ -263,21 +263,29 @@ function Services() {
     }
   };
 
-  const check_column_paddingleft = () => {
-    // those 2 columns // each one has minimum width of 200 // so the two columns can only show together if screen width is equal or greater than 400
-    if (window.screen.availWidth < 400) {
-      return 30;
-    }
-    return 0;
-  };
+  // when this component is loaded
+  $(document).ready(function () {
+    // ScreenOrientation {angle: 0, type: "portrait-primary", onchange: null}
+    // ScreenOrientation {angle: 90, type: "landscape-primary", onchange: null}
+    // window.screen.orientation.type  // window.screen.orientation.angle
 
-  const check_column_textalign = () => {
-    // those 2 columns // each one has minimum width of 200 // so the two columns can only show together if screen width is equal or greater than 400
     if (window.screen.availWidth < 400) {
-      return "left";
+      $(".columnWithImage").css("text-align", "left");
+      $(".columnWithText").css("padding-left", 30);
+    } else {
+      $(".columnWithImage").css("text-align", "center");
+      $(".columnWithText").css("padding-left", 0);
     }
-    return "center";
-  };
+    $(window).on("orientationchange", function (event) {
+      if (window.screen.availWidth < 400) {
+        $(".columnWithImage").css("text-align", "left");
+        $(".columnWithText").css("padding-left", 30);
+      } else {
+        $(".columnWithImage").css("text-align", "center");
+        $(".columnWithText").css("padding-left", 0);
+      }
+    });
+  });
 
   const check_fontsize = () => {
     if (window.screen.availWidth <= 360) {
@@ -494,8 +502,8 @@ function Services() {
                             minWidth: 200,
                             paddingTop: 25,
                             paddingBottom: 25,
-                            textAlign: check_column_textalign(),
                           }}
+                          className="columnWithImage"
                         >
                           <Image
                             fluid
@@ -516,8 +524,8 @@ function Services() {
                             paddingTop: 25,
                             paddingBottom: 25,
                             paddingRight: 30,
-                            paddingLeft: check_column_paddingleft(),
                           }}
+                          className="columnWithText"
                         >
                           <Row style={{ fontSize: 20 }}>
                             <GoogleFontNavItem
