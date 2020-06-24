@@ -4,7 +4,6 @@ import navbar_selection_reducer from "./navbar";
 import urlSourceReducer from "./urlSource";
 import addUserModalReducer from "./addUserModal";
 import userSigningReducer from "./userSigning";
-import productsNavItemReducer from "./productsNavItem";
 
 // root reducer // it combines all reducers into one
 const allReducers = combineReducers({
@@ -13,7 +12,6 @@ const allReducers = combineReducers({
   url: urlSourceReducer,
   addUserModal: addUserModalReducer,
   userSigning: userSigningReducer,
-  productsNavItem: productsNavItemReducer,
 });
 
 export default allReducers;

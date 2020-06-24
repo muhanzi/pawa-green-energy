@@ -33,9 +33,3 @@ export const user_signed_in = (user) => {
 export const user_signed_out = () => {
   return { type: "SIGNED_OUT" };
 };
-export const hide_products_nav_item = () => {
-  return { type: "HIDE" };
-};
-export const show_products_nav_item = () => {
-  return { type: "SHOW" };
-};

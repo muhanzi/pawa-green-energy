@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import firebase from "../firebase.js";
-import { useEffect } from "react";
 import FooterList from "./subcomponents/footerList";
 import project from "./subcomponents/static";
 import {
@@ -45,33 +44,6 @@ import $ from "jquery";
 import LinearDeterminate from "./subcomponents/linearProgressBar.js";
 
 function Services() {
-  /*
-  const [firebaseData, setFirebaseData] = useState([]);
-  const saveToFirestore = () => {
-    firebase
-      .firestore()
-      .collection("users")
-      .add({ name: "charly", role: "system engineer" })
-      .then(() => {
-        // do something // promise is resolved or rejected
-      });
-  };
-
-  const retrieveFromFirestore = () => {
-    firebase
-      .firestore()
-      .collection("users")
-      .onSnapshot((snapshot) => {
-        const users = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })); // ...  --> spread operator will join id with fields inside the document to form a javascript object
-        setFirebaseData(users);
-      });
-  };
-  useEffect(retrieveFromFirestore);
-  */
-
   const user_details = useSelector((state) => state.userSigning);
   const selection = user_details.selection ? user_details.selection : [];
   const [hideCards, setHideCards] = useState(true);
@@ -336,7 +308,7 @@ function Services() {
               product: selectionProduct,
               address: address,
               paymentMode: getpaymentMethod(),
-              date: new Date(),
+              date: new Date().toString(),
             });
           });
           updateUserSelection(user_details.id, address);
@@ -710,7 +682,7 @@ function Services() {
                   </span>
                 </Col>
               </Row>
-              <Row style={{ paddingBottom: 20 }}>
+              <Row style={{ paddingBottom: 10 }}>
                 {/* <Col>Cash on Delivery</Col>
                 <Col>Mobile Money</Col>
                 <Col>Debit Card</Col> */}
@@ -869,7 +841,7 @@ function Services() {
                   </span>
                 </Col>
               </Row>
-              <Row hidden={hiddenLinearDeterminate}>
+              <Row hidden={hiddenLinearDeterminate} style={{ paddingTop: 5 }}>
                 <Col>
                   <LinearDeterminate />
                 </Col>

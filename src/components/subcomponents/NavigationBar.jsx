@@ -12,7 +12,6 @@ import {
   navbar_selection_key4,
   user_signed_out,
   user_signed_in,
-  show_products_nav_item,
 } from "../../actions";
 import ContactBar from "./contactBar";
 import styled from "styled-components";
@@ -30,7 +29,6 @@ function Navigation({ history }) {
   // current value in the store //
   const key_selected = useSelector((state) => state.navbar); // check in the /reducers/index.js
   const user_details = useSelector((state) => state.userSigning);
-  const hideProductsNavItem = useSelector((state) => state.productsNavItem);
   const selection = user_details.selection ? user_details.selection : [];
   const user_role = user_details.role ? user_details.role : "";
   //
@@ -38,6 +36,7 @@ function Navigation({ history }) {
   const [loginStatus, setLoginStatus] = useState("Login");
   const [hideBadge, setHideBadge] = useState(true);
   const [hideAdminNavItem, setHideAdminNavItem] = useState(true);
+  const [hideProductsNavItem, setHideProductsNavItem] = useState(false);
 
   const handleSelection = (key) => {
     switch (key) {
@@ -47,10 +46,12 @@ function Navigation({ history }) {
         break;
       case "key2":
         if (currentUser) {
-          if (user_details.selection) {
-            // when properties of user_details have has values we don't fetch them again because firestore updates in real time // onsnapshot
-            dispatch(navbar_selection_key2());
-            history.push("/services");
+          if (user_details.role) {
+            if (user_details.role === "customer") {
+              // when properties of user_details have has values we don't fetch them again because firestore updates in real time // onsnapshot
+              dispatch(navbar_selection_key2());
+              history.push("/services");
+            }
           } else {
             getUserDetails(firebase.auth().currentUser.uid); // just to get user details when user might have reloaded the window but didn't sign out // when the store was reset
           }
@@ -64,10 +65,10 @@ function Navigation({ history }) {
             if (user_details.role === "admin") {
               dispatch(navbar_selection_key3());
               history.push("/administration");
-            } // admin user data will always be present if // key3 is clicked
+            } // admin user data will always be present if key3 is clicked // since admin navbar item is shown only when user_details has values in redux store
           }
         } else {
-          dispatch(show_AddUserModal()); // do this action // tells the reducer which action to perform
+          dispatch(show_AddUserModal());
         }
         break;
       case "key4":
@@ -78,7 +79,6 @@ function Navigation({ history }) {
         if (currentUser) {
           firebase.auth().signOut();
           dispatch(user_signed_out());
-          dispatch(show_products_nav_item()); // in case user was an admin // now we show products nav item
         } else {
           dispatch(show_AddUserModal()); // do this action // tells the reducer which action to perform
         }
@@ -90,24 +90,80 @@ function Navigation({ history }) {
   let location = useLocation();
 
   useEffect(() => {
+    //////////////////////////////////////////////////////////////////
     if (currentUser) {
       setLoginStatus("Logout");
+      //
+      if (selection.length > 0) {
+        setHideBadge(false);
+      } else {
+        setHideBadge(true);
+      }
+      //
+      if (user_role === "" && firebase.auth().currentUser) {
+        // user_role === "" // but there is a currentUser
+        // firebase.auth().currentUser // might be null after logout
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(firebase.auth().currentUser.uid)
+          .get()
+          .then((user_data) => {
+            if (user_data.exists) {
+              if (user_data.data().role === "admin") {
+                setHideAdminNavItem(false); // shown
+                setHideProductsNavItem(true); // hidden
+              } else if (user_data.data().role === "customer") {
+                setHideAdminNavItem(true); // hidden
+                setHideProductsNavItem(false); // shown
+              }
+              dispatch(user_signed_in(user_data.data()));
+              // just to maintain a snapshot // in case data changes in firestore
+              firebase
+                .firestore()
+                .collection("users")
+                .doc(user_data.data().id)
+                .onSnapshot((snapshot) => {
+                  const user = snapshot.data();
+                  if (user) {
+                    dispatch(user_signed_in(user));
+                  }
+                });
+            } else {
+              // if user data do not exists in our user collection // we sign the user out
+              firebase.auth().signOut();
+              dispatch(user_signed_out());
+              setHideAdminNavItem(true); // hidden
+              setHideProductsNavItem(false); // shown
+            }
+          })
+          .catch((error) => {
+            // we failed to load user data // meaning we don't know which role this user has
+            setHideAdminNavItem(true); // hidden
+            setHideProductsNavItem(false); // shown
+          });
+      } else {
+        // other times when useEffect() is called // when values in the dependency list have changed
+        if (user_role === "admin") {
+          setHideProductsNavItem(true); // hidden
+          setHideAdminNavItem(false); // shown
+        } else if (user_role === "customer") {
+          setHideAdminNavItem(true); // hidden
+          setHideProductsNavItem(false); // shown
+        } else {
+          setHideAdminNavItem(true); // hidden
+          setHideProductsNavItem(false); // shown
+        }
+      }
     } else {
+      // when useEffect() is called but there is no current user
+      setHideAdminNavItem(true); // hidden
+      setHideProductsNavItem(false); // shown
       setLoginStatus("Login");
-    }
-    //
-    if (selection.length > 0) {
-      setHideBadge(false);
-    } else {
       setHideBadge(true);
     }
-    //
-    if (user_role === "admin") {
-      setHideAdminNavItem(false);
-    } else {
-      setHideAdminNavItem(true);
-    }
-  }, [currentUser, selection, user_role]); // [currentUser,...] // is the dependencyList meaning that useEffect() will activate only when values in the list change
+    //////////////////////////////////////////////////////////////////
+  }, [currentUser, selection.length, user_role, dispatch]); // [currentUser,...] // is the dependencyList meaning that useEffect() will activate only when values in the list change
 
   const currentRoute = (path) => {
     if (location.pathname === path) {
@@ -128,10 +184,9 @@ function Navigation({ history }) {
       .then((user_data) => {
         if (user_data.exists) {
           if (user_data.data().role === "admin") {
-            // after the site was reloaded // an Administrator must sign in again // for security // and this will enable us to separate customer from administrator
-            firebase.auth().signOut();
-            dispatch(user_signed_out());
-            dispatch(show_AddUserModal());
+            // just to update the redux store state
+            dispatch(user_signed_in(user_data.data())); // useEffect() will be called // admin navbar item will be shown but products&services navbar item will be hidden
+            user_data_changed(user_data.data().id); // just to maintain a snapshot // in case user data changes in firestore
           } else {
             dispatch(user_signed_in(user_data.data()));
             dispatch(navbar_selection_key2());
@@ -139,14 +194,14 @@ function Navigation({ history }) {
             user_data_changed(user_data.data().id); // just to maintain a snapshot // in case data changes
           }
         } else {
-          // if user data do not exists in our user collection // we sign him out
+          // if user data do not exists in our user collection // we sign the user out
           firebase.auth().signOut();
           dispatch(user_signed_out());
           dispatch(show_AddUserModal());
         }
       })
       .catch((error) => {
-        alert("A Network Error ocurred! Try again later");
+        alert("A Network Error ocurred! Try again later.");
       });
   };
 

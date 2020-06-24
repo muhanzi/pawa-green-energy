@@ -14,7 +14,6 @@ import {
   navbar_selection_key3,
   user_signed_in,
   user_signed_out,
-  hide_products_nav_item,
 } from "../actions/index.js";
 import LinearDeterminate from "../components/subcomponents/linearProgressBar.js";
 
@@ -146,7 +145,6 @@ const LoginAndSignUp = ({ history }) => {
       await firebase
         .auth()
         .createUserWithEmailAndPassword(addEmail, addPassword);
-      //firebase.auth().sendSignInLinkToEmail(addEmail);
       saveUserDetails({
         id: firebase.auth().currentUser.uid,
         name: addFirstName + " " + addLastName,
@@ -198,24 +196,21 @@ const LoginAndSignUp = ({ history }) => {
       .get()
       .then((user_data) => {
         if (user_data.exists) {
+          // first update redux store before pushing anything in the router //browser
+          dispatch(user_signed_in(user_data.data()));
           if (user_data.data().role === "admin") {
-            dispatch(user_signed_in(user_data.data()));
-            dispatch(hide_products_nav_item());
             dispatch(navbar_selection_key3());
-            setHiddenLoginLinearDeterminate(true);
             history.push("/administration");
-            emptySignInForm();
-            hideAddUserModal();
-            user_data_changed(user_data.data().id); // just to maintain a snapshot // in case data changes
-          } else {
-            dispatch(user_signed_in(user_data.data()));
-            setHiddenLoginLinearDeterminate(true);
+          } else if (user_data.data().role === "customer") {
             history.push("/services");
             dispatch(navbar_selection_key2());
-            emptySignInForm();
-            hideAddUserModal();
-            user_data_changed(user_data.data().id); // just to maintain a snapshot // in case data changes
           }
+          //
+          setHiddenLoginLinearDeterminate(true);
+          emptySignInForm();
+          hideAddUserModal();
+          user_data_changed(user_data.data().id); // just to maintain a snapshot // in case data changes
+          //
         } else {
           // if user data do not exists in our user collection // we sign him out
           firebase.auth().signOut();

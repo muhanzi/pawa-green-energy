@@ -89,7 +89,7 @@ function Card(props) {
       .then((user_data) => {
         if (user_data.exists) {
           if (user_data.data().role === "admin") {
-            firebase.auth().signOut(); // an admin must login again after the page was reloaded
+            dispatch(user_signed_in(user_data.data())); // just to update the redux store
             alert(
               "This user cannot order any product! An administrator cannot perform this operation."
             );
