@@ -664,11 +664,11 @@ class Home extends Component {
                     lg={7}
                     style={{
                       minHeight: 100,
-                      minWidth: 400,
+                      Width: 400,
                       margin: "0 auto",
                       paddingTop: 25,
                       paddingBottom: 25,
-                      paddingRight: 60,
+                      paddingRight: 30,
                       fontSize: 20,
                     }}
                   >
@@ -709,11 +709,11 @@ class Home extends Component {
                     lg={7}
                     style={{
                       minHeight: 100,
-                      minWidth: 400,
+                      Width: 400,
                       margin: "0 auto",
                       paddingTop: 25,
                       paddingBottom: 25,
-                      paddingRight: 60,
+                      paddingRight: 30,
                       fontSize: 20,
                     }}
                   >
@@ -757,11 +757,11 @@ class Home extends Component {
                     lg={7}
                     style={{
                       minHeight: 100,
-                      minWidth: 400,
+                      Width: 400,
                       margin: "0 auto",
                       paddingTop: 25,
                       paddingBottom: 25,
-                      paddingRight: 60,
+                      paddingRight: 30,
                       fontSize: 20,
                     }}
                   >
