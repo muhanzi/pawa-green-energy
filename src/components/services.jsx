@@ -691,9 +691,6 @@ function Services() {
                 </Col>
               </Row>
               <Row style={{ paddingBottom: 10 }}>
-                {/* <Col>Cash on Delivery</Col>
-                <Col>Mobile Money</Col>
-                <Col>Debit Card</Col> */}
                 <Col>
                   <Paper square className={classes.root} variant="outlined">
                     <Tabs

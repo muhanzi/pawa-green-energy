@@ -7,7 +7,7 @@ import {
   MDBCardTitle,
   MDBCardText,
   MDBRow,
-  MDBCol
+  MDBCol,
 } from "mdbreact";
 
 class CardDesign extends Component {
