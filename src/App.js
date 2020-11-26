@@ -1,16 +1,13 @@
 import React from "react";
 import "./App.css";
-import Navigation from "./components/subcomponents/NavigationBar";
 import MyRoutes from "./components/subcomponents/routing";
-import MyFooter from "./components/subcomponents/footer";
+import { AuthProvider } from "./firebase authentication/Auth";
 
 function App() {
   return (
-    <div>
-      <Navigation />
+    <AuthProvider>
       <MyRoutes />
-      <MyFooter />
-    </div>
+    </AuthProvider>
   );
 }
 

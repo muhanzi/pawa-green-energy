@@ -1,0 +1,3 @@
+if (self.CavalryLogger) { CavalryLogger.start_js(["t0+Sw"]); }
+
+__d("RelayFBEnvironmentFactory",["RelayModern"],(function(a,b,c,d,e,f){"use strict";a=b("RelayModern").createEnvironmentFactory;e.exports=a(function(a){return{configName:"RelayFBEnvironment",actorID:a}})}),null);

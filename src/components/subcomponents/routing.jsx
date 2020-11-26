@@ -4,16 +4,25 @@ import Home from "../home";
 import WrongUrl from "./wrongUrl";
 import Services from "../services";
 import About from "../about";
+import { PrivateRoute } from "../../firebase authentication/privateRoute";
+import { AdminRoute } from "../../firebase authentication/adminRoute";
+import Navigation from "./NavigationBar";
+import MyFooter from "./footer";
+import Administration from "../administration";
 
 const MyRoutes = () => {
   return (
     <BrowserRouter>
+      <Navigation style={{ position: "fixed" }} />
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/services" component={Services} />
+        {/* protected route // to access /services user must be logged in */}
+        <PrivateRoute exact path="/services" component={Services} />
+        <AdminRoute exact path="/administration" component={Administration} />
         <Route exact path="/about" component={About} />
         <Route component={WrongUrl} />
       </Switch>
+      <MyFooter />
     </BrowserRouter>
   );
 };
