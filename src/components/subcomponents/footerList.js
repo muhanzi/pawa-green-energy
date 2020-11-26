@@ -15,8 +15,28 @@ import {
   faLinkedin,
   faWhatsappSquare,
 } from "@fortawesome/free-brands-svg-icons";
+import emailjs from "emailjs-com";
 
 function FooterList() {
+  var templateParams = {
+    from_name: "Lebon",
+    to_name: "PGE",
+    message_html: "Check this out!",
+    reply_to: "muhanagisha@gmail.com",
+  };
+
+  const sendEmail = () => {
+    emailjs.init("user_uNOYGwD8BsPOhvUXqG9lm"); // set user_id
+    emailjs.send("gmail", "template_YtJBcVnS", templateParams).then(
+      function (response) {
+        console.log("SUCCESS!", response.status, response.text);
+      },
+      function (error) {
+        console.log("FAILED...", error);
+      }
+    );
+  };
+
   return (
     <div>
       <Container fluid>
@@ -59,8 +79,9 @@ function FooterList() {
             <Row>
               <span>
                 <a
-                  href="http://gmail.com"
+                  href="#"
                   style={{ color: project().projectColor }}
+                  onClick={sendEmail}
                 >
                   <FontAwesomeIcon
                     icon={faEnvelopeSquare}

@@ -12,7 +12,7 @@ class GoogleFontNavItem extends Component {
     sacramento: "'Sacramento', cursive",
     open: "'Open Sans', sans-serif",
     tangerine: "'Tangerine', serif",
-    vibes: "'Great Vibes', cursive"
+    vibes: "'Great Vibes', cursive",
   };
 
   check_font_family = () => {
@@ -42,42 +42,42 @@ class GoogleFontNavItem extends Component {
           fonts={[
             {
               font: "Roboto",
-              weights: [400, "400i"]
+              weights: [400, "400i"],
             },
             {
               font: "Roboto Mono",
-              weights: [400, 700]
+              weights: [400, 700],
             },
             {
               font: "'La Belle Aurore', cursive",
-              weights: [400, 700]
+              weights: [400, 700],
             },
             {
               font: "'Sacramento', cursive",
-              weights: [400, 700]
+              weights: [400, 700],
             },
             {
               font: "'Open Sans', sans-serif",
-              weights: [400, 700]
+              weights: [400, 700],
             },
             {
               font: "'Pacifico', cursive",
-              weights: [400, "400i"]
+              weights: [400, "400i"],
             },
             {
               font: "'Tangerine',serif",
-              weights: [400, "400i"]
+              weights: [400, "400i"],
             },
             {
               font: "'Great Vibes', cursive",
-              weights: [400, 700]
-            }
+              weights: [400, 700],
+            },
           ]}
           subsets={["cyrillic-ext", "greek"]}
         />
         <span
           style={{
-            fontFamily: this.check_font_family()
+            fontFamily: this.check_font_family(),
           }}
         >
           {this.props.text}
